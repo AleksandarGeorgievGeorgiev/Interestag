@@ -4,6 +4,7 @@ import { Router } from '@reach/router'
 import { Link } from '@reach/router';
 import { Home } from '../home/Home';
 import { Profile } from '../profile/Profile';
+import LoginScreen from '../login/LoginScreen';
 
 
 const Navbar = () => {
@@ -16,6 +17,7 @@ const Navbar = () => {
       <Router>
         <Home path="/" />
         <Profile path="/profile/:id" />
+        <LoginScreen path="/login"/>
       </Router>
     </nav>
   )

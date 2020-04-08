@@ -5,9 +5,49 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-align: center;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.MuiPaper-root.AppBar{
+  text-align: center;
+  position: relative;
+  background-color: #9984d4;
+}
+
+.MuiSvgIcon-root{
+  color: black;
+}
+
+.MuiBottomNavigationAction-label{
+  color: black;
+}
+.MuiButtonBase-root.MuiButton-text.signin-button{
+  background-color:#9984d4;
+  text-transform: none;
+  color: white;
+  width: 200px;
+  font-weight: bold;
+}
+
+.MuiBottomNavigation-root.bottom-nav-custom-css{
+  overflow: hidden;
+  background-color:#9984d4;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.login-screen{
+  width: 500px;
+  height: 695px;
+}
+
+.app-logo {
+  height: 30vmin;
+  pointer-events: none;
 }
