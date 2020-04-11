@@ -1,26 +1,23 @@
-import React from 'react'
-import { Router } from '@reach/router'
+import React from 'react';
+import { Router, Link } from '@reach/router';
 
-import { Link } from '@reach/router';
+
 import { Home } from '../home/Home';
 import { Profile } from '../profile/Profile';
 import LoginScreen from '../login/LoginScreen';
 
 
-const Navbar = () => {
+const Navbar = () => (
+  <nav>
+    <Link to="/">Home</Link>
+    <Link to="/profile/1">Profile</Link>
 
-  return (
-    <nav>
-      <Link to="/">Home</Link>
-      <Link to="/profile/1">Profile</Link>
+    <Router>
+      <Home path="/" />
+      <Profile path="/profile/:id" />
+      <LoginScreen path="/login" />
+    </Router>
+  </nav>
+);
 
-      <Router>
-        <Home path="/" />
-        <Profile path="/profile/:id" />
-        <LoginScreen path="/login"/>
-      </Router>
-    </nav>
-  )
-}
-
-export { Navbar }
+export { Navbar };
