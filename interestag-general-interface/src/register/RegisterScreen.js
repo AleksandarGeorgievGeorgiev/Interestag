@@ -1,10 +1,15 @@
 import React from 'react';
-import RegisterForm from './RegisterForm';
 
+import RegisterForm from './RegisterForm';
+import Header from '../core/Header'
 
 function RegisterScreen(){
     return(
-        <RegisterForm/>
+        <div className="body">
+            <Header />
+            <br/>
+            <RegisterForm/>
+        </div>
     )
 }
 

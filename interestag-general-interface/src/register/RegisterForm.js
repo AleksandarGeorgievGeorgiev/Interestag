@@ -1,37 +1,32 @@
 import React, {useState} from 'react'
 
+import AccountChooseList from './AccountChooseList'
+
 import TextField from '@material-ui/core/TextField'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import Button from '@material-ui/core/Button'
 import GoogleButton from 'react-google-button'
 import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from '@date-io/date-fns';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import Header from '../core/Header'
 
 function RegisterForm(props){      
+    const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedDate, handleDateChange] = useState(new Date());
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
-
     const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
-      console.log(event.currentTarget)
+        setAnchorEl(event.currentTarget);
+        console.log(event.currentTarget)
     };
-  
+    
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
     };
 
     return(
         <MuiThemeProvider>
             <React.Fragment>
-                <br/>
-                <Header />
-                <br/>
-                <br/>
                 <TextField
                     id="standard-firstName-flexible"
                     label="First name"
@@ -79,26 +74,13 @@ function RegisterForm(props){
                 </MuiPickersUtilsProvider>
                 <br/>
                 <br/>
-                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-                    Choose Account type
-                </Button>
-                <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={handleClose}>Free</MenuItem>
-                    <MenuItem onClick={handleClose}>Paid</MenuItem>
-                    <MenuItem onClick={handleClose}>Premieum</MenuItem>
-                </Menu>
+                <AccountChooseList />
                 <br/>
+                <Button 
+                    className="signup-button"
+                    style={styles.button}
+                >Save</Button>
                 <br/>
-                <GoogleButton 
-                    type="dark"
-                    style={styles.googleButton}
-                />
             </React.Fragment>
         </MuiThemeProvider>
     )
