@@ -5,6 +5,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { Link } from '@reach/router';
 
 
 function BottomNavBar() {
@@ -13,12 +14,12 @@ function BottomNavBar() {
       className="bottom-nav-custom-css"
       showLabels
     >
-      <BottomNavigationAction label="Profile" icon={<PersonIcon />} />
-      <BottomNavigationAction label="Add" icon={<AddIcon />} />
-      <BottomNavigationAction label="Home" icon={<HomeIcon />} />
-      <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
+      <Link to="/profile"><BottomNavigationAction label="Profile" icon={<PersonIcon />} /></Link>
+      <Link to="/"><BottomNavigationAction label="Add" icon={<AddIcon />} /></Link>
+      <Link to="/"><BottomNavigationAction label="Home" icon={<HomeIcon />} /></Link>
+      <Link to="/"><BottomNavigationAction label="Settings" icon={<SettingsIcon />} /></Link>
     </BottomNavigation>
   );
 }
 
-export default BottomNavBar;
+export { BottomNavBar };

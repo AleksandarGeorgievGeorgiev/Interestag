@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -7,29 +7,42 @@ import GoogleButton from 'react-google-button';
 
 import Header from '../core/Header';
 
-function LoginForm(props) {
+function LoginForm({ handleLoginSubmit }) {
+  const [userCredentials, setUserCredentials] = useState();
+
+  const handleInputChange = (event) => {
+    event.persist();
+    const input = {
+      inputName: event.target.name,
+      inputValue: event.target.value,
+    };
+
+    setUserCredentials({ ...userCredentials, [input.inputName]: input.inputValue });
+  };
+
   return (
     <MuiThemeProvider>
-      <>
+      <form>
         <Header />
         <br />
         <br />
         <TextField
           id="standard-username/email-flexible"
+          name="userName"
           label="Username / Email"
-          multiline
-          rowsMax="4"
+          onChange={handleInputChange}
         />
         <br />
         <br />
         <TextField
-          id="standard-username/email-flexible"
+          name="userPassword"
           label="Password"
-          multiline
-          rowsMax="4"
+          type="password"
+          onChange={handleInputChange}
         />
         <br />
         <Button
+          onClick={() => handleLoginSubmit(userCredentials)}
           className="signin-button"
           style={styles.button}
         >
@@ -40,7 +53,7 @@ function LoginForm(props) {
           type="dark"
           style={styles.googleButton}
         />
-      </>
+      </form>
     </MuiThemeProvider>
   );
 }
