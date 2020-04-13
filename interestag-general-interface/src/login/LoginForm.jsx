@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
 import TextField from '@material-ui/core/TextField';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -6,9 +6,23 @@ import Button from '@material-ui/core/Button';
 import GoogleButton from 'react-google-button';
 
 import Header from '../core/Header';
+import { UserContext } from '../core/UserContext';
 
-function LoginForm({ handleLoginSubmit }) {
+const styles = {
+  button: {
+    margin: 15,
+  },
+  googleButton: {
+    float: 'none',
+    position: 'static',
+    display: 'block',
+    margin: 'auto',
+  },
+};
+
+function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
+  const { handleLoginSubmit } = useContext(UserContext);
 
   const handleInputChange = (event) => {
     event.persist();
@@ -57,17 +71,5 @@ function LoginForm({ handleLoginSubmit }) {
     </MuiThemeProvider>
   );
 }
-
-const styles = {
-  button: {
-    margin: 15,
-  },
-  googleButton: {
-    float: 'none',
-    position: 'static',
-    display: 'block',
-    margin: 'auto',
-  },
-};
 
 export default LoginForm;

@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+
+import { UserContext } from '../core/UserContext';
 
 const useApi = () => {
   const [data, setData] = useState('Waiting for message...');
@@ -14,11 +16,16 @@ const useApi = () => {
   return data;
 };
 
-const Home = () => (
-  <div>
-    <h1>Home</h1>
-    <pre>{`${useApi()}`}</pre>
-  </div>
-);
+const Home = () => {
+  const { currentUser } = useContext(UserContext);
+
+  return (
+    <div>
+      <h1>Home</h1>
+      {currentUser.userId && 'Welcome'}
+      <pre>{`${useApi()}`}</pre>
+    </div>
+  );
+};
 
 export { Home };

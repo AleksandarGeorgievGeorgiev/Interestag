@@ -2,9 +2,9 @@ import React from 'react';
 import LoginForm from './LoginForm';
 
 
-function LoginScreen({ handleLoginSubmit }) {
+function LoginScreen() {
   return (
-    <LoginForm handleLoginSubmit={handleLoginSubmit} />
+    <LoginForm />
   );
 }
 
