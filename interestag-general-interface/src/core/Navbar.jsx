@@ -1,22 +1,13 @@
-import React from 'react';
-import { Router, Link } from '@reach/router';
-
-
-import { Home } from '../home/Home';
-import { Profile } from '../profile/Profile';
-import LoginScreen from '../login/LoginScreen';
-
+import React, { useContext } from 'react';
+import { Link } from '@reach/router';
+import { UserContext } from '../core/UserContext';
 
 const Navbar = () => (
+  const { currentUser } = useContext(UserContext);
+
   <nav>
     <Link to="/">Home</Link>
-    <Link to="/profile/1">Profile</Link>
-
-    <Router>
-      <Home path="/" />
-      <Profile path="/profile/:id" />
-      <LoginScreen path="/login" />
-    </Router>
+    <Link to={`/profile/`}>Profile</Link>
   </nav>
 );
 
