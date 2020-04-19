@@ -27,9 +27,9 @@ function App() {
     return (
       <>
         <Home default path="/" />
-        <LoginScreen path="/login" />
-        <RegisterScreen path="/register" />
-        <Redirect from="/profile/*" to="/login" />
+        <LoginScreen path="/login/" />
+        <RegisterScreen path="/register/" />
+        <Redirect from="/profile/*" to="/login/" />
       </>
     );
   };
@@ -38,7 +38,6 @@ function App() {
 
     <div className="App">
       <AppTopBar pageName={testName} />
-      <br />
       <Router>
         {renderRoutes()}
       </Router>

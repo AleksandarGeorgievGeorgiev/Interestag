@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import GoogleButton from 'react-google-button';
 
 import Header from '../core/Header';
-import { UserContext } from '../core/UserContext';
+//import { UserContext } from '../core/UserContext';
 
 const styles = {
   button: {
@@ -22,7 +22,7 @@ const styles = {
 
 function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
-  const { handleLoginSubmit } = useContext(UserContext);
+  //const { handleLoginSubmit } = useContext(UserContext);
 
   const handleInputChange = (event) => {
     event.persist();
@@ -35,11 +35,7 @@ function LoginForm() {
   };
 
   return (
-    <MuiThemeProvider>
       <form>
-        <Header />
-        <br />
-        <br />
         <TextField
           id="standard-username/email-flexible"
           name="userName"
@@ -56,7 +52,7 @@ function LoginForm() {
         />
         <br />
         <Button
-          onClick={() => handleLoginSubmit(userCredentials)}
+          //onClick={() => handleLoginSubmit(userCredentials)}
           className="signin-button"
           style={styles.button}
         >
@@ -68,7 +64,6 @@ function LoginForm() {
           style={styles.googleButton}
         />
       </form>
-    </MuiThemeProvider>
   );
 }
 

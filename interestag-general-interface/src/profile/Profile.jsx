@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-import { UserContext } from '../core/UserContext';
+//import { UserContext } from '../core/UserContext';
 
 const Profile = () => {
-  const { currentUser } = useContext(UserContext);
+  //const { currentUser } = useContext(UserContext);
 
   return (
     <div>
       <h1>Profile</h1>
-      {currentUser.userId && currentUser.userName}
+      {/*currentUser.userId && currentUser.userName*/}
     </div>
 
   );

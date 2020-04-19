@@ -1,89 +1,95 @@
-import React, {useState} from 'react'
+import React, { useState } from "react";
 
-import AccountChooseList from './AccountChooseList'
+import AccountChooseList from "./AccountChooseList";
+import useRegister from "./userRegister";
+import validate from "./validateRegister";
 
-import TextField from '@material-ui/core/TextField'
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
-import Button from '@material-ui/core/Button'
-import GoogleButton from 'react-google-button'
-import { DateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from '@date-io/date-fns';
+import TextField from "@material-ui/core/TextField";
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
+import Button from "@material-ui/core/Button";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 
-import Header from '../core/Header'
+function RegisterForm() {
+  const { handleChange, handleSubmit, values, errors } = useRegister(
+    submit,
+    validate
+  );
 
-function RegisterForm(props){      
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedDate, handleDateChange] = useState(new Date());
+  function submit() {
+    console.log("Submitted!");
+  }
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-        console.log(event.currentTarget)
-    };
-    
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    return(
-        <MuiThemeProvider>
-            <React.Fragment>
-                <TextField
-                    id="standard-firstName-flexible"
-                    label="First name"
-                    multiline
-                    rowsMax="4"
-                />
-                <br/>
-                <TextField
-                    id="standard-lastName-flexible"
-                    label="Last name"
-                    multiline
-                    rowsMax="4"
-                />
-                <br/>
-                <TextField
-                    id="standard-username/email-flexible"
-                    label="Username"
-                    multiline
-                    rowsMax="4"
-                />
-                <br/>
-                <TextField
-                    id="standard-Email-flexible"
-                    label="Email"
-                    multiline
-                    rowsMax="4"
-                />
-                <br/>
-                <TextField
-                    id="standard-Password-flexible"
-                    label="Password"
-                    multiline
-                    rowsMax="4"
-                />
-                <br/>
-                <br/>
-                <AccountChooseList />
-                <Button 
-                    className="signup-button"
-                    style={styles.button}
-                >Save</Button>
-                <br/>
-            </React.Fragment>
-        </MuiThemeProvider>
-    )
+  return (
+    <form>
+      <TextField
+        id="standard-userName-flexible"
+        name="username"
+        label="username"
+        value={values.username}
+        onChange={handleChange}
+        multiline
+        rowsMax="4"
+      />
+      <br />
+      {errors.username && (
+        <Alert className="alert" severity="error">
+          {errors.username}
+        </Alert>
+      )}
+      <TextField
+        id="standard-email-flexible"
+        name="email"
+        label="email"
+        value={values.email}
+        onChange={handleChange}
+        multiline
+        rowsMax="4"
+      />
+      <br />
+      {errors.email && (
+        <Alert className="alert" severity="error">
+          {errors.email}
+        </Alert>
+      )}
+      <TextField
+        id="standard-password-flexible"
+        name="password"
+        label="password"
+        value={values.password}
+        onChange={handleChange}
+        multiline
+        rowsMax="4"
+      />
+      <br />
+      {errors.password && (
+        <Alert className="alert" severity="error">
+          {errors.password}
+        </Alert>
+      )}
+      <TextField
+        id="standard-passwordConfirm-flexible"
+        name="confirmPassword"
+        label="confirm password"
+        value={values.confirmPassword}
+        onChange={handleChange}
+        multiline
+        rowsMax="4"
+      />
+      {errors.confirmPassword && (
+        <Alert className="alert" severity="error">
+          {errors.confirmPassword}
+        </Alert>
+      )}
+      <br />
+      <br />
+      {/* <AccountChooseList /> */}
+      <Button className="signup-button" onClick={handleSubmit}>
+        Save
+      </Button>
+      <br />
+    </form>
+  );
 }
 
-const styles = {
-    button: {
-        margin: 15,
-    },
-    googleButton:{
-        float:'none',
-        position:'static',
-        display:'block',
-        margin:'auto',
-    }
-}
-
-export default RegisterForm
+export default RegisterForm;

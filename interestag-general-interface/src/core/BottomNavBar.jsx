@@ -17,10 +17,10 @@ function BottomNavBar() {
       className="bottom-nav-custom-css"
       showLabels
     >
-      <Link to={`/profile/${currentUser.userId}`}><BottomNavigationAction label="Profile" icon={<PersonIcon />} /></Link>
-      <Link to="/"><BottomNavigationAction label="Add" icon={<AddIcon />} /></Link>
-      <Link to="/"><BottomNavigationAction label="Home" icon={<HomeIcon />} /></Link>
-      <Link to="/"><BottomNavigationAction label="Settings" icon={<SettingsIcon />} /></Link>
+      <BottomNavigationAction component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />} />
+      <BottomNavigationAction component={Link} to="/" label="Add" icon={<AddIcon />} />
+      <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
+      <BottomNavigationAction component={Link} to="/" label="Settings" icon={<SettingsIcon />} />
     </BottomNavigation>
   );
 }
