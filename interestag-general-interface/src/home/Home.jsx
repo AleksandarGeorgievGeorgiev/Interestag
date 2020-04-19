@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
-import { UserContext } from '../core/UserContext';
+import { UserContext } from '../user-context/UserContextProvider';
 
 const useApi = () => {
   const [data, setData] = useState('Waiting for message...');

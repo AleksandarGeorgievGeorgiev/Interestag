@@ -5,6 +5,7 @@ const userMock = {
   userId: '91491',
   userName: 'Pen4o',
   permissions: [],
+  exp: '',
 };
 
 const useLogin = () => {

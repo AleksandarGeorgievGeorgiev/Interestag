@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import GoogleButton from 'react-google-button';
 
 import Header from '../core/Header';
-import { UserContext } from '../core/UserContext';
+import { UserContext } from '../user-context/UserContextProvider';
 
 const styles = {
   button: {

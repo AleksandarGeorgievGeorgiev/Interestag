@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Link } from '@reach/router';
-import { UserContext } from './UserContext';
+import { UserContext } from '../user-context/UserContextProvider';
 
 
 function BottomNavBar() {
