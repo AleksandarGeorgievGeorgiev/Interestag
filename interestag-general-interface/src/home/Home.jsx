@@ -1,29 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
+import { Button } from '@material-ui/core';
+
 import { UserContext } from '../user-context/UserContextProvider';
-
-const useApi = () => {
-  const [data, setData] = useState('Waiting for message...');
-  const baseurl = 'http://192.168.0.101:8000';
-
-  useEffect(() => {
-    axios.get(`${baseurl}/api/test`)
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
-  });
-
-  return data;
-};
 
 const Home = () => {
   const { currentUser } = useContext(UserContext);
+  const [hello, setHello] = useState('Waiting For Message...');
+  const testApi = () => {
+    axios.get(`${process.env.REACT_APP_BASEURL}/api/test`)
+      .then((res) => setHello(res.data))
+      .catch((err) => console.log(err));
+  };
 
   return (
-    <div>
+    <div className="body">
       <h1>Home</h1>
-      {currentUser.userId && 'Welcome'}
-      <pre>{`${useApi()}`}</pre>
+      {hello}
+      <br />
+      <Button onClick={testApi}>Test Me</Button>
     </div>
   );
 };

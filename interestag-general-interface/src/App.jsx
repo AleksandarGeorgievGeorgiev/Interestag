@@ -4,15 +4,20 @@ import { Router, Redirect } from '@reach/router';
 
 import { Home } from './home/Home';
 import { Profile } from './profile/Profile';
-import LoginScreen from './login/LoginScreen';
-import RegisterScreen from './register/RegisterScreen';
+import { LoginScreen } from './login/LoginScreen';
+import { RegisterScreen } from './register/RegisterScreen';
 import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
 import { UserContext } from './user-context/UserContextProvider';
+import { useTokenInterceptor } from './user-context/useTokenInterceptor';
 
 function App() {
   const testName = 'Welcome to ProEp';
   const { currentUser } = useContext(UserContext);
+  const { attach } = useTokenInterceptor();
+
+  attach();
+
   const renderRoutes = () => {
     if (currentUser.userId) {
       return (
@@ -25,11 +30,10 @@ function App() {
 
     return (
       <>
-        <Home default path="/" />
+        <Home path="/" />
         <LoginScreen path="/login" />
         <RegisterScreen path="/register" />
-          <Profile path="/profile/:id" />
-        {/* <Redirect from="/profile/*" to="/login" /> */}
+        <Redirect from="/profile/*" to="/login" />
       </>
     );
   };

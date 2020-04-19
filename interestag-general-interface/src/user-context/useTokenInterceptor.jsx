@@ -5,13 +5,13 @@ import axios from 'axios';
 import { UserContext } from './UserContextProvider';
 
 const useTokenInterceptor = () => {
-  const currentUser = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   const attach = () => {
-    console.log('attached');
     axios.interceptors.request.use((config) => {
-      if (currentUser.exp < Date.now()) {
+      if (!currentUser.exp || currentUser.exp < Date.now()) {
         // TODO: call refresh api
+        console.log('refresh me', currentUser);
       }
       return config;
     }, (error) => {

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import axios from 'axios';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -20,7 +21,7 @@ const styles = {
 
 function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
-  const { handleLoginSubmit } = useContext(UserContext);
+  const { handleRegister } = useContext(UserContext);
 
   const handleInputChange = (event) => {
     event.persist();
@@ -32,25 +33,31 @@ function LoginForm() {
     setUserCredentials({ ...userCredentials, [input.inputName]: input.inputValue });
   };
 
+  const handleLoginSubmit = () => {
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials)
+      .then((res) => handleRegister(res))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <form>
       <TextField
         id="standard-username/email-flexible"
-        name="userName"
+        name="username"
         label="Username / Email"
         onChange={handleInputChange}
       />
       <br />
       <br />
       <TextField
-        name="userPassword"
+        name="password"
         label="Password"
         type="password"
         onChange={handleInputChange}
       />
       <br />
       <Button
-        onClick={() => handleLoginSubmit(userCredentials)}
+        onClick={handleLoginSubmit}
         className="signin-button"
         style={styles.button}
       >
@@ -65,4 +72,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export { LoginForm };

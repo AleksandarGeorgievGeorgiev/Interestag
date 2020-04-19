@@ -1,24 +1,23 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
-import AccountChooseList from "./AccountChooseList";
-import {useRegister} from "./useRegister";
-import validate from "./validateRegister";
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Alert from '@material-ui/lab/Alert';
+// import AccountChooseList from './AccountChooseList';
 
-import TextField from "@material-ui/core/TextField";
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
-import Button from "@material-ui/core/Button";
-import Alert from "@material-ui/lab/Alert";
-import AlertTitle from "@material-ui/lab/AlertTitle";
+import { useRegister } from './useRegister';
+import validate from './validateRegister';
 import { UserContext } from '../user-context/UserContextProvider';
 
 function RegisterForm() {
-  const { handleChange, handleSubmit, values, errors } = useRegister(
+  const {
+    handleChange, handleSubmit, values, errors,
+  } = useRegister(
     submit,
-    validate
+    validate,
   );
-  const [data, setData] = useState();
-  const baseUrl = "http://localhost:8000/api/";
+  const baseUrl = 'http://localhost:8000/api/';
   const { handleRegister } = useContext(UserContext);
 
   function submit() {
@@ -28,8 +27,6 @@ function RegisterForm() {
       .post(`${baseUrl}auth/register/`, values)
       .then((res) => { console.log(res); handleRegister(res); })
       .catch((err) => console.log(err));
-
-    return data;
   }
 
   return (
@@ -104,4 +101,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export { RegisterForm };
