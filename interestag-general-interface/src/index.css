@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: absolute;
+  /* top: 50px; */
+  left: 0;
+  right: 0;
+  /* margin-bottom: 50px; */
   text-align: center;
 }
 
@@ -15,7 +20,7 @@ code {
 
 .MuiPaper-root.AppBar{
   text-align: center;
-  position: relative;
+  position: fixed;
   background-color: #9984d4;
 }
 
@@ -27,6 +32,22 @@ code {
   color: black;
 }
 .MuiButtonBase-root.MuiButton-text.signin-button{
+  background-color:#9984d4;
+  text-transform: none;
+  color: white;
+  width: 200px;
+  font-weight: bold;
+}
+
+.MuiButtonBase-root.MuiButton-text.signup-button{
+  background-color:#9984d4;
+  text-transform: none;
+  color: white;
+  width: 200px;
+  font-weight: bold;
+}
+
+.MuiButtonBase-root.accountList{
   background-color:#9984d4;
   text-transform: none;
   color: white;
@@ -47,7 +68,17 @@ code {
   height: 695px;
 }
 
+.MuiPaper-root.alert{
+  color: red;
+  background-color: #ffe0e0;
+  text-align: center;
+}
+
 .app-logo {
   height: 30vmin;
   pointer-events: none;
+}
+
+.body {
+  margin: 65px auto;
 }

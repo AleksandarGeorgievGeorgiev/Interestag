@@ -8,12 +8,11 @@ import LoginScreen from './login/LoginScreen';
 import RegisterScreen from './register/RegisterScreen';
 import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
-import { UserContext } from './core/UserContext';
+import { UserContext } from './user-context/UserContextProvider';
 
 function App() {
   const testName = 'Welcome to ProEp';
   const { currentUser } = useContext(UserContext);
-
   const renderRoutes = () => {
     if (currentUser.userId) {
       return (
