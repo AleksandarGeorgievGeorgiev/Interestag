@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 
 const useRegister = (callback, validate) => {
-    const [values, setValues] = useState({username: "", email: "", password: "", confirmPassword: ""})
+    const [values, setValues] = useState({username: "", email: "", password: "", password_confirm: ""})
     const [errors, setErrors] = useState({})
 
     const handleChange = (event) => {
@@ -24,4 +24,4 @@ const useRegister = (callback, validate) => {
         errors
     };
 }
-export default useRegister
+export { useRegister };

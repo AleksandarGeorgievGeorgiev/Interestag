@@ -57,10 +57,10 @@ function LoginForm() {
         Sign in
       </Button>
       <br />
-      <GoogleButton
+      {/* <GoogleButton
         type="dark"
         style={styles.googleButton}
-      />
+      /> */}
     </form>
   );
 }

@@ -28,7 +28,8 @@ function App() {
         <Home default path="/" />
         <LoginScreen path="/login" />
         <RegisterScreen path="/register" />
-        <Redirect from="/profile/*" to="/login" />
+          <Profile path="/profile/:id" />
+        {/* <Redirect from="/profile/*" to="/login" /> */}
       </>
     );
   };
