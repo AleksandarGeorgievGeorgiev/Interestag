@@ -5,7 +5,7 @@ const Profile = () => {
   const { currentUser } = useContext(UserContext);
 
   return (
-    <div>
+    <div className="body">
       <h1>Profile</h1>
       {currentUser.userId && currentUser.username}
     </div>

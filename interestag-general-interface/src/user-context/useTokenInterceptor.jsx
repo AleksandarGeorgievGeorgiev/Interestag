@@ -3,19 +3,20 @@ import React, { useContext } from 'react';
 import axios from 'axios';
 
 import { UserContext } from './UserContextProvider';
+import { useRefreshToken } from './useRefreshToken';
 
 const useTokenInterceptor = () => {
   const { currentUser } = useContext(UserContext);
+  const handleRefreshToken = useRefreshToken();
 
   const attach = () => {
     axios.interceptors.request.use((config) => {
-      if (!currentUser.exp || currentUser.exp < Date.now()) {
-        // TODO: call refresh api
-        console.log('refresh me', currentUser);
+      if (currentUser.exp < Date.now()) {
+        handleRefreshToken();
+        console.log('refreshed');
       }
       return config;
     }, (error) => {
-      // TODO: Does refresh return not 2xx response?
       console.log('rejected');
       return Promise.reject(error);
     });

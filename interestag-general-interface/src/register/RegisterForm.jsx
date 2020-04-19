@@ -21,7 +21,6 @@ function RegisterForm() {
   const { handleRegister } = useContext(UserContext);
 
   function submit() {
-    // TODO: fix values
     handleRegister({});
     axios
       .post(`${baseUrl}auth/register/`, values)
