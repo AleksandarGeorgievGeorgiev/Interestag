@@ -1,29 +1,39 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react';
-import axios from 'axios';
 
+import axios from 'axios';
+import { Redirect } from 'react-router-dom';
 import { UserContext } from './UserContextProvider';
 import { useRefreshToken } from './useRefreshToken';
 
 const useTokenInterceptor = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, isAuthenticated } = useContext(UserContext);
   const handleRefreshToken = useRefreshToken();
+  let activeInterceptor = {};
 
-  const attach = () => {
-    axios.interceptors.request.use((config) => {
-      if (currentUser.exp < Date.now()) {
-        handleRefreshToken();
-        console.log('refreshed');
-      }
+  const attachInterceptor = () => {
+    activeInterceptor = axios.interceptors.request.use((config) => {
+      
+      // if (!isAuthenticated) {
+         
+      // }
+      console.log(config);
+      console.log('intercept');
+      // handleRefreshToken();
+          // .then((res) => res.config)
+          // .catch((err) => (<Redirect to="/login/" />)); // navigate to login
+
       return config;
-    }, (error) => {
-      console.log('rejected');
-      return Promise.reject(error);
-    });
+    }, (err) => Promise.reject(err));
   };
 
+  const detachInterceptor = () => {
+    axios.interceptors.request.eject(activeInterceptor);
+  }
+
   return {
-    attach,
+    attachInterceptor,
+    detachInterceptor,
   };
 };
 

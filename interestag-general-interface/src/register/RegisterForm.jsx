@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 // import AccountChooseList from './AccountChooseList';
@@ -9,6 +8,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useRegister } from './useRegister';
 import validate from './validateRegister';
 import { UserContext } from '../user-context/UserContextProvider';
+import { TextField } from '@material-ui/core';
 
 function RegisterForm() {
   const {
@@ -18,26 +18,25 @@ function RegisterForm() {
     validate,
   );
   const baseUrl = 'http://localhost:8000/api/';
-  const { handleRegister } = useContext(UserContext);
+  const { userFromCookie } = useContext(UserContext);
 
   function submit() {
-    handleRegister({});
-    axios
-      .post(`${baseUrl}auth/register/`, values)
-      .then((res) => { console.log(res); handleRegister(res); })
-      .catch((err) => console.log(err));
+    userFromCookie(values);
+    // axios
+    //   .post(`${baseUrl}auth/register/`, values)
+    //   .then((res) => { handleRegister(values.username); })
+    //   .catch((err) => console.log(err));
   }
 
   return (
     <form>
       <TextField
-        id="standard-userName-flexible"
+        id="standard-username-flexible"
         name="username"
-        label="username"
+        label="Username"
         value={values.username}
         onChange={handleChange}
-        multiline
-        rowsMax="4"
+        type="text"
       />
       <br />
       {errors.username && (
@@ -48,11 +47,10 @@ function RegisterForm() {
       <TextField
         id="standard-email-flexible"
         name="email"
-        label="email"
+        label="E-mail"
         value={values.email}
         onChange={handleChange}
-        multiline
-        rowsMax="4"
+        type="email"
       />
       <br />
       {errors.email && (
@@ -63,11 +61,10 @@ function RegisterForm() {
       <TextField
         id="standard-password-flexible"
         name="password"
-        label="password"
+        label="Password"
         value={values.password}
         onChange={handleChange}
-        multiline
-        rowsMax="4"
+        type="password"
       />
       <br />
       {errors.password && (
@@ -78,11 +75,10 @@ function RegisterForm() {
       <TextField
         id="standard-passwordConfirm-flexible"
         name="password_confirm"
-        label="confirm password"
+        label="Confirm Password"
         value={values.password_confirm}
         onChange={handleChange}
-        multiline
-        rowsMax="4"
+        type="password"
       />
       {errors.confirmPassword && (
         <Alert className="alert" severity="error">
@@ -93,7 +89,7 @@ function RegisterForm() {
       <br />
       {/* <AccountChooseList /> */}
       <Button className="signup-button" onClick={handleSubmit}>
-        Save
+        Register
       </Button>
       <br />
     </form>

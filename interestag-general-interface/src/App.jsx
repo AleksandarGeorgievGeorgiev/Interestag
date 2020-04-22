@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import { Router, Redirect } from '@reach/router';
+import { BrowserRouter, Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import { Home } from './home/Home';
 import { Profile } from './profile/Profile';
@@ -14,27 +14,31 @@ import { useTokenInterceptor } from './user-context/useTokenInterceptor';
 function App() {
   const testName = 'Welcome to ProEp';
   const { currentUser } = useContext(UserContext);
-  const { attach } = useTokenInterceptor();
-
-  attach();
+  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
+  attachInterceptor();
+  // useEffect(() => {
+    
+  //   // console.log(axios.request.interceptors);
+  //   return () => detachInterceptor();
+  // })
 
   const renderRoutes = () => {
     if (currentUser.userId) {
       return (
-        <>
-          <Home default path="/" />
-          <Profile path="/profile/:id" />
-        </>
+        <Switch>
+          <Route exact path="/" ><Home /></Route>
+          <Route path="/profile/:id" ><Profile /></Route>
+        </ Switch>
       );
     }
 
     return (
-      <>
-        <Home path="/" />
-        <LoginScreen path="/login" />
-        <RegisterScreen path="/register" />
+      <Switch>
+        <Route exact path="/" ><Home /></Route>
+        <Route path="/login/" ><LoginScreen /></Route>
+        <Route path="/register/" > <RegisterScreen /></Route>
         <Redirect from="/profile/*" to="/login" />
-      </>
+      </ Switch>
     );
   };
 
@@ -43,10 +47,10 @@ function App() {
     <div className="App">
       <AppTopBar pageName={testName} />
       <br />
-      <Router>
+      <BrowserRouter>
         {renderRoutes()}
-      </Router>
-      <BottomNavBar />
+        <BottomNavBar />
+      </BrowserRouter>
     </div>
   );
 }

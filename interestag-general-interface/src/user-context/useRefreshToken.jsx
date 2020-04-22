@@ -1,4 +1,4 @@
-import React, {useContext, useState}from "react";
+import React, { useContext, useState } from "react";
 import axios from 'axios';
 
 import { UserContext } from './UserContextProvider';
@@ -9,19 +9,11 @@ const useRefreshToken = () => {
   const { handleRegister } = useContext(UserContext);
 
   const handleRefreshToken = () => {
-      axios
-        .post(`${baseUrl}auth/token/refresh-jwt/`, {})
-        .then((res) => {
-          console.log(res);
-          handleRegister(res);
-        })
-        .catch((err) => console.log(err));
-    
-      return data;
+    axios.post(`${baseUrl}auth/token/refresh-jwt/`, {});
   }
 
   return handleRefreshToken;
 };
 
-export {useRefreshToken}
+export { useRefreshToken }
 

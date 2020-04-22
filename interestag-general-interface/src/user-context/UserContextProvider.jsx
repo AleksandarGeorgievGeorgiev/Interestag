@@ -11,27 +11,37 @@ const UserContext = React.createContext(
   },
 );
 
+const createFakeCookie = ({ username }) => {
+  const jwt  = {
+    userId: 1,
+    username: username,
+    permissions: [],
+    exp: Date.now().valueOf() + 5*60000,
+  }
+
+  const cookie = `jwt=${window.btoa(JSON.stringify(jwt))}; expires=${Date().toString()}; Max-Age=300; Path=/`;
+  
+  return cookie;
+}
+
 const UserContextProvider = ({ children }) => {
   const [currentUser, setUserData] = useState({});
   const loginUser = useLogin();
 
-  const handleLoginSubmit = (userCredentials) => {
-    if (!currentUser.userId) {
-      const userData = loginUser(userCredentials);
-
-      setUserData(userData);
-    }
-  };
-
-  const handleRegister = (response) => {
-    const userPayload = 'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJ1c2VySWQiOiAyNCwgInVzZXJuYW1lIjogInNkYWFzYSIsICJwZXJtaXNzaW9ucyI6IFtdLCAiZXhwIjogMTU4NzMxNDIzN30.46a0764e75f1baa3a139292e4871a946826471e8ecf2e74e98efef03812fbe72';
-    const userData = JSON.parse(window.atob(userPayload.split('.')[1].trim()));
+  const userFromCookie = (response) => {
+    const fakeCookie = createFakeCookie(response); //TEST only
+    const userPayload = fakeCookie.split(';')[0].trim().split('=')[1];
+    const userData = JSON.parse(window.atob(userPayload));
 
     setUserData(userData);
   };
 
+  const isAuthenticated = () => {
+    return currentUser.exp ? Date.now() < currentUser.exp : false;
+  }
+
   return (
-    <UserContext.Provider value={{ currentUser, handleLoginSubmit, handleRegister }}>
+    <UserContext.Provider value={{ currentUser, userFromCookie, isAuthenticated }}>
       {children}
     </UserContext.Provider>
   );

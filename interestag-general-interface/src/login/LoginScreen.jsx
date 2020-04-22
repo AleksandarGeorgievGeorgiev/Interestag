@@ -1,6 +1,6 @@
 import React from 'react';
 import { LoginForm } from './LoginForm';
-import Header from '../core/Header';
+import { Header } from '../core/Header';
 
 function LoginScreen() {
   return (
