@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import PersonIcon from '@material-ui/icons/Person';
@@ -9,10 +9,18 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../user-context/UserContextProvider';
-
+import { useTokenInterceptor } from '../user-context/useTokenInterceptor';
 
 function BottomNavBar() {
   const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
+  
+  useEffect(() => {
+    attachInterceptor();
+    
+    // console.log(axios.request.interceptors);
+    return () => detachInterceptor();
+  })
 
   const renderNavBar = () => {
     if (isAuthenticated()) {

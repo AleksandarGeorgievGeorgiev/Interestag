@@ -9,18 +9,10 @@ import { RegisterScreen } from './register/RegisterScreen';
 import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
 import { UserContext } from './user-context/UserContextProvider';
-import { useTokenInterceptor } from './user-context/useTokenInterceptor';
 
 function App() {
   const testName = 'Welcome to ProEp';
   const { currentUser } = useContext(UserContext);
-  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
-  attachInterceptor();
-  // useEffect(() => {
-    
-  //   // console.log(axios.request.interceptors);
-  //   return () => detachInterceptor();
-  // })
 
   const renderRoutes = () => {
     if (currentUser.userId) {

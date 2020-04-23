@@ -9,7 +9,10 @@ const useRefreshToken = () => {
   const { handleRegister } = useContext(UserContext);
 
   const handleRefreshToken = () => {
-    axios.post(`${baseUrl}auth/token/refresh-jwt/`, {});
+    return axios
+      .post(`${baseUrl}auth/token/refresh-jwt/`, {})
+      .then((res) => res)
+      .catch((err) => Promise.reject(err));
   }
 
   return handleRefreshToken;

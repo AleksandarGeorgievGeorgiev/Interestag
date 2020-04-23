@@ -2,26 +2,36 @@
 import React, { useContext } from 'react';
 
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { UserContext } from './UserContextProvider';
 import { useRefreshToken } from './useRefreshToken';
 
 const useTokenInterceptor = () => {
   const { currentUser, isAuthenticated } = useContext(UserContext);
   const handleRefreshToken = useRefreshToken();
+  const navigationHistory = useHistory();
   let activeInterceptor = {};
 
   const attachInterceptor = () => {
     activeInterceptor = axios.interceptors.request.use((config) => {
+      if(config.url.includes('/auth/login/') 
+        || config.url.includes('/auth/register/')
+        || config.url.includes('/auth/token/refresh-jwt/')) {
+          
+          return config;
+      }
       
-      // if (!isAuthenticated) {
-         
-      // }
-      console.log(config);
-      console.log('intercept');
-      // handleRefreshToken();
-          // .then((res) => res.config)
-          // .catch((err) => (<Redirect to="/login/" />)); // navigate to login
+      if (!isAuthenticated()) {
+        return handleRefreshToken()
+          .then((res) => config)
+          .catch((err) => {
+              navigationHistory.push('/login/');
+              
+              return Promise.reject(err);
+            }); // navigate to login
+      } else {
+        
+      }
 
       return config;
     }, (err) => Promise.reject(err));
