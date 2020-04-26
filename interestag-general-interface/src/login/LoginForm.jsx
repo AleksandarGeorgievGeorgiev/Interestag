@@ -23,7 +23,7 @@ const styles = {
 
 function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
-  const { userFromCookie } = useContext(UserContext);
+  const { authenticateUser } = useContext(UserContext);
   const navigationHistory = useHistory();
 
   const handleInputChange = (event) => {
@@ -38,7 +38,7 @@ function LoginForm() {
 
   const handleLoginSubmit = () => {
     axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials)
-      .then((res) => { userFromCookie(userCredentials); navigationHistory.push('/') })
+      .then((res) => { authenticateUser(userCredentials); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   };
 

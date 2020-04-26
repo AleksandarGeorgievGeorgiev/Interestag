@@ -35,7 +35,7 @@ const useClientStorage = () => {
 
   const getFromStorage = (key) => {
     const data = tryStorageOperation(() => currentStorage.getItem(key));
-    console.log(data);
+    
     return JSON.parse(data);
   }
 

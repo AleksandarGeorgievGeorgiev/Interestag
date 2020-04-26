@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Button } from '@material-ui/core';
 
 import { UserContext } from '../user-context/UserContextProvider';
-import { useHistory } from 'react-router-dom';
 import { Header } from '../core/Header';
 
 const Home = () => {
@@ -15,12 +14,6 @@ const Home = () => {
       .then((res) => setHello(res.data))
       .catch((err) => console.log(err));
   };
-
-  const history = useHistory();
-  // attach();
-  useEffect(() => {
-    //return history.listen((location) => console.log(location));
-  });
 
   return (
     <div className="body">

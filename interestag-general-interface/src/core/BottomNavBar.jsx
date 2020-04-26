@@ -1,4 +1,7 @@
 import React, { useContext, useEffect } from 'react';
+
+import { Link } from 'react-router-dom';
+
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import PersonIcon from '@material-ui/icons/Person';
@@ -7,19 +10,19 @@ import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import { Link } from 'react-router-dom';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
 import { UserContext } from '../user-context/UserContextProvider';
 import { useTokenInterceptor } from '../user-context/useTokenInterceptor';
 
 function BottomNavBar() {
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isAuthenticated, deauthenticateUser } = useContext(UserContext);
   const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
   
   useEffect(() => {
     attachInterceptor();
     
-    // console.log(axios.request.interceptors);
-    return () => detachInterceptor();
+    return () => detachInterceptor(); //TODO: Move somewhere else
   })
 
   const renderNavBar = () => {
@@ -33,6 +36,7 @@ function BottomNavBar() {
           <BottomNavigationAction component={Link} to="/" label="Add" icon={<AddIcon />} />
           <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction component={Link} to="/" label="Settings" icon={<SettingsIcon />} />
+          <BottomNavigationAction onClick={deauthenticateUser} label="Logout" icon={<ExitToAppIcon />} />
         </BottomNavigation>
       )
     }

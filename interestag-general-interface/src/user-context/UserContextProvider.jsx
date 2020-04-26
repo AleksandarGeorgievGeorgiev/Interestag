@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
 
-import { useLogin } from '../login/useLogin';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios';
+
 import { useClientStorage } from '../core/useClientStorage';
 
 const UserContext = React.createContext(
@@ -27,14 +28,13 @@ const createFakeCookie = ({ username }) => {
 
 const UserContextProvider = ({ children }) => {
   const clientStorage = useClientStorage();
-  const loginUser = useLogin();
   const [currentUser, setUserData] = useState(() => { 
     const user = clientStorage.getFromStorage('currentUser');
 
     return user ? user : {}
   });
 
-  const userFromCookie = (response) => {
+  const authenticateUser = (response) => {
     const fakeCookie = createFakeCookie(response); //TEST only
     const userPayload = fakeCookie.split(';')[0].trim().split('=')[1];
     const userData = JSON.parse(window.atob(userPayload));
@@ -43,12 +43,24 @@ const UserContextProvider = ({ children }) => {
     setUserData(userData);
   };
 
+  const deauthenticateUser = () => {
+    clientStorage.removeFromStorage('currentUser'); 
+    setUserData({}); //TEST ONLY
+    // axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {})
+    //   .then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
+  }
+
   const isAuthenticated = () => {
     return currentUser.exp ? Date.now() < currentUser.exp : false;
   }
 
   return (
-    <UserContext.Provider value={{ currentUser, userFromCookie, isAuthenticated }}>
+    <UserContext.Provider value={{ 
+      currentUser,
+      isAuthenticated,
+      authenticateUser,
+      deauthenticateUser
+    }}>
       {children}
     </UserContext.Provider>
   );

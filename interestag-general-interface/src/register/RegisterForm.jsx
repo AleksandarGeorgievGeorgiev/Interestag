@@ -20,16 +20,14 @@ function RegisterForm() {
     validate,
   );
   const baseUrl = 'http://localhost:8000/api/';
-  const { userFromCookie } = useContext(UserContext);
+  const { authenticateUser } = useContext(UserContext);
   const navigationHistory = useHistory();
 
   function submit() {
-    userFromCookie(values); //TODO: This is just for dev
-    navigationHistory.push('/');
-    // axios
-    //   .post(`${baseUrl}auth/register/`, values)
-    //   .then((res) => { handleRegister(values.username); })
-    //   .catch((err) => console.log(err));
+    axios
+      .post(`${baseUrl}auth/register/`, values)
+      .then((res) => { authenticateUser(values); navigationHistory.push('/') })
+      .catch((err) => console.log(err));
   }
 
   return (
