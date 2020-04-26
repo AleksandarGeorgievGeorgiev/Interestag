@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
+
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -21,7 +23,8 @@ const styles = {
 
 function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
-  const { handleRegister } = useContext(UserContext);
+  const { userFromCookie } = useContext(UserContext);
+  const navigationHistory = useHistory();
 
   const handleInputChange = (event) => {
     event.persist();
@@ -35,7 +38,7 @@ function LoginForm() {
 
   const handleLoginSubmit = () => {
     axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials)
-      .then((res) => handleRegister(res))
+      .then((res) => { userFromCookie(userCredentials); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   };
 

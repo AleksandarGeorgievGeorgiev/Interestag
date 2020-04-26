@@ -19,7 +19,7 @@ const Home = () => {
   const history = useHistory();
   // attach();
   useEffect(() => {
-    return history.listen((location) => console.log(location));
+    //return history.listen((location) => console.log(location));
   });
 
   return (

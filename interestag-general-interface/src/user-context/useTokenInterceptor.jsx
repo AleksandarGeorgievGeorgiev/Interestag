@@ -28,9 +28,7 @@ const useTokenInterceptor = () => {
               navigationHistory.push('/login/');
               
               return Promise.reject(err);
-            }); // navigate to login
-      } else {
-        
+            });
       }
 
       return config;

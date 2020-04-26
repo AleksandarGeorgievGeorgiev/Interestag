@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 
 import { useLogin } from '../login/useLogin';
+import { useClientStorage } from '../core/useClientStorage';
 
 const UserContext = React.createContext(
   {
@@ -25,14 +26,20 @@ const createFakeCookie = ({ username }) => {
 }
 
 const UserContextProvider = ({ children }) => {
-  const [currentUser, setUserData] = useState({});
+  const clientStorage = useClientStorage();
   const loginUser = useLogin();
+  const [currentUser, setUserData] = useState(() => { 
+    const user = clientStorage.getFromStorage('currentUser');
+
+    return user ? user : {}
+  });
 
   const userFromCookie = (response) => {
     const fakeCookie = createFakeCookie(response); //TEST only
     const userPayload = fakeCookie.split(';')[0].trim().split('=')[1];
     const userData = JSON.parse(window.atob(userPayload));
 
+    clientStorage.saveInStorage('currentUser', userData);
     setUserData(userData);
   };
 

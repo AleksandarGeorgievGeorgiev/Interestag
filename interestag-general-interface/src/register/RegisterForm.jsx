@@ -1,5 +1,7 @@
 import React, { useState, useContext } from 'react';
+
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
@@ -19,9 +21,11 @@ function RegisterForm() {
   );
   const baseUrl = 'http://localhost:8000/api/';
   const { userFromCookie } = useContext(UserContext);
+  const navigationHistory = useHistory();
 
   function submit() {
-    userFromCookie(values);
+    userFromCookie(values); //TODO: This is just for dev
+    navigationHistory.push('/');
     // axios
     //   .post(`${baseUrl}auth/register/`, values)
     //   .then((res) => { handleRegister(values.username); })

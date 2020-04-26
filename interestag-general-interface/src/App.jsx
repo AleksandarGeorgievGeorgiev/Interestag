@@ -12,14 +12,15 @@ import { UserContext } from './user-context/UserContextProvider';
 
 function App() {
   const testName = 'Welcome to ProEp';
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, isAuthenticated } = useContext(UserContext);
 
   const renderRoutes = () => {
-    if (currentUser.userId) {
+    if (isAuthenticated()) {
       return (
         <Switch>
           <Route exact path="/" ><Home /></Route>
           <Route path="/profile/:id" ><Profile /></Route>
+          <Redirect from="/*" to="/login" />
         </ Switch>
       );
     }
