@@ -43,6 +43,14 @@ const UserContextProvider = ({ children }) => {
     setUserData(userData);
   };
 
+  const isLoggedIn = () => {
+    const rteCookie = getCookie("rte");
+    if(rteCookie != ""){
+      return true;
+    }
+    return false;
+  }
+
   const deauthenticateUser = () => {
     clientStorage.removeFromStorage('currentUser'); 
     setUserData({}); //TEST ONLY
@@ -57,6 +65,7 @@ const UserContextProvider = ({ children }) => {
   return (
     <UserContext.Provider value={{ 
       currentUser,
+      isLoggedIn,
       isAuthenticated,
       authenticateUser,
       deauthenticateUser

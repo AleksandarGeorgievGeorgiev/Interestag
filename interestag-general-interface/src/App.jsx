@@ -8,20 +8,25 @@ import { LoginScreen } from './login/LoginScreen';
 import { RegisterScreen } from './register/RegisterScreen';
 import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
+import { PrivateRoute } from './user-context/PrivateRoute'
 import { UserContext } from './user-context/UserContextProvider';
 
 function App() {
   const testName = 'Welcome to ProEp';
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isAuthenticated, isLoggedIn } = useContext(UserContext);
 
   const renderRoutes = () => {
     if (isAuthenticated()) {
       return (
         <Switch>
-          <Route exact path="/" ><Home /></Route>
-          <Route path="/profile/:id" ><Profile /></Route>
-          <Redirect from="/*" to="/login" />
-        </ Switch>
+          {/* <Route exact path="/" ><Home /></Route>
+          <Route path="/profile/:id" render={<PrivateRoute component={Profile}/>}></Route> */}
+
+          <PrivateRoute authed={isLoggedIn()} path="/profile/:id" component={Profile}/>
+          <PrivateRoute authed={isLoggedIn()} exact path="/" component={Home}/>
+
+          {/* <Redirect from="/*" to="/login" /> */}
+        </Switch>
       );
     }
 
@@ -31,7 +36,7 @@ function App() {
         <Route path="/login/" ><LoginScreen /></Route>
         <Route path="/register/" > <RegisterScreen /></Route>
         <Redirect from="/profile/*" to="/login" />
-      </ Switch>
+      </Switch>
     );
   };
 
@@ -42,7 +47,7 @@ function App() {
       <br />
       <BrowserRouter>
         {renderRoutes()}
-        <BottomNavBar />
+      <BottomNavBar/>
       </BrowserRouter>
     </div>
   );
