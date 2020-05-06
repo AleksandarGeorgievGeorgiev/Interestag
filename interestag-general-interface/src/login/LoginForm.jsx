@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import GoogleButton from 'react-google-button';
+import FacebookLogin from 'react-facebook-login';
 
 import { UserContext } from '../user-context/UserContextProvider';
 
@@ -42,6 +42,21 @@ function LoginForm() {
       .catch((err) => console.log(err));
   };
 
+  const responseFacebook = (response) => {
+    const body = {
+      userId: response.userID,
+      accessToken: response.accessToken
+    }
+    console.log(body)
+      // axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/facebook-auth/`, body)
+      //   .then((res) => { authenticateUser(userCredentials); navigationHistory.push('/') })
+      //   .catch((err) => console.log(err));
+  }
+
+  const componentClicked = () => {
+    console.log("clicked")
+  }
+
   return (
     <form>
       <TextField
@@ -67,10 +82,16 @@ function LoginForm() {
         Sign in
       </Button>
       <br />
-      {/* <GoogleButton
-        type="dark"
-        style={styles.googleButton}
-      /> */}
+      <FacebookLogin 
+        appId="2529177343987074"
+        autoLoad = {false}
+        fields="name,email,picture"
+        callback={responseFacebook}
+        onClick={componentClicked}
+        size="small"
+        textButton="Continue with Facebook"
+        icon="fab fa-facebook-f"
+      />
     </form>
   );
 }

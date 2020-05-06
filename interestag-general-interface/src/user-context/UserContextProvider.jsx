@@ -44,7 +44,7 @@ const UserContextProvider = ({ children }) => {
   };
 
   const isLoggedIn = () => {
-    const rteCookie = getCookie("rte");
+    const rteCookie = document.getCookie("rte");
     if(rteCookie != ""){
       return true;
     }

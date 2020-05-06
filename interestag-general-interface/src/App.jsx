@@ -21,11 +21,10 @@ function App() {
         <Switch>
           {/* <Route exact path="/" ><Home /></Route>
           <Route path="/profile/:id" render={<PrivateRoute component={Profile}/>}></Route> */}
-
-          <PrivateRoute authed={isLoggedIn()} path="/profile/:id" component={Profile}/>
-          <PrivateRoute authed={isLoggedIn()} exact path="/" component={Home}/>
-
           {/* <Redirect from="/*" to="/login" /> */}
+
+          <PrivateRoute authed={isAuthenticated()} path="/profile/:id" component={Profile}/>
+          <PrivateRoute authed={isLoggedIn()} exact path="/" component={Home}/>
         </Switch>
       );
     }

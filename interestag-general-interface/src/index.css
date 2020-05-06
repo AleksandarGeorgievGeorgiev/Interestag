@@ -82,3 +82,12 @@ code {
 .body {
   margin: 65px auto;
 }
+
+.my-facebook-button-class{
+  background-color:#3b5998;
+  text-transform: none;
+  color: white;
+  width: 200px;
+  font-weight: bold;
+  height: 36px;
+}
