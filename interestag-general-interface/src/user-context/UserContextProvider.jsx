@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import { useClientStorage } from '../core/useClientStorage';
 
@@ -26,6 +27,16 @@ const createFakeCookie = ({ username }) => {
   return cookie;
 }
 
+const createFakeLoggedInCookie = () => {
+  const rte = {
+    exp: Date.now().valueOf() + 3*60000
+  }
+
+  const cookie = `rte=${window.btoa(JSON.stringify(rte))}; expires=${Date().toString()}; Max-Age=300; Path=/`;
+
+  return cookie;
+}
+
 const UserContextProvider = ({ children }) => {
   const clientStorage = useClientStorage();
   const [currentUser, setUserData] = useState(() => { 
@@ -44,10 +55,12 @@ const UserContextProvider = ({ children }) => {
   };
 
   const isLoggedIn = () => {
-    const rteCookie = document.getCookie("rte");
-    if(rteCookie != ""){
+    const rteCookie = Cookies.get("rte");
+    // const rteCookie = createFakeLoggedInCookie();
+    console.log(rteCookie)
+    if(rteCookie != undefined){
       return true;
-    }
+    } 
     return false;
   }
 
