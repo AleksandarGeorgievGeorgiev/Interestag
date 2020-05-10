@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Alert from '@material-ui/lab/Alert';
 // import AccountChooseList from './AccountChooseList';
 
-import { useRegister } from './useRegister';
+import { useFormHandler } from './useFormHandler';
 import validate from './validateRegister';
 import { UserContext } from '../user-context/UserContextProvider';
 import { TextField } from '@material-ui/core';
@@ -15,7 +15,7 @@ import { TextField } from '@material-ui/core';
 function RegisterForm() {
   const {
     handleChange, handleSubmit, values, errors,
-  } = useRegister(
+  } = useFormHandler(
     submit,
     validate,
   );
@@ -24,6 +24,7 @@ function RegisterForm() {
   const navigationHistory = useHistory();
 
   function submit() {
+    console.log(values)
     axios
       .post(`${baseUrl}auth/register/`, values)
       .then((res) => { authenticateUser(values); navigationHistory.push('/') })
@@ -90,7 +91,7 @@ function RegisterForm() {
       <br />
       <br />
       {/* <AccountChooseList /> */}
-      <Button className="signup-button" onClick={handleSubmit}>
+      <Button className="custom-fab-button" onClick={handleSubmit}>
         Register
       </Button>
       <br />

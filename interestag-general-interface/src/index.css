@@ -31,7 +31,8 @@ code {
 .MuiBottomNavigationAction-label{
   color: black;
 }
-.MuiButtonBase-root.MuiButton-text.signin-button{
+
+.MuiButtonBase-root.MuiButton-text.custom-fab-button{
   background-color:#9984d4;
   text-transform: none;
   color: white;
@@ -39,12 +40,16 @@ code {
   font-weight: bold;
 }
 
-.MuiButtonBase-root.MuiButton-text.signup-button{
+.MuiButtonBase-root.MuiFab-root.custom-fab-button{
   background-color:#9984d4;
   text-transform: none;
   color: white;
   width: 200px;
   font-weight: bold;
+}
+
+.MuiSvgIcon-root.forwardArrowIcon{
+  color: white;
 }
 
 .MuiButtonBase-root.accountList{

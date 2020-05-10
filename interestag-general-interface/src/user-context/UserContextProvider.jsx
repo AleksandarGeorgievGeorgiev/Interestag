@@ -55,8 +55,9 @@ const UserContextProvider = ({ children }) => {
   };
 
   const isLoggedIn = () => {
-    const rteCookie = Cookies.get("rte");
-    // const rteCookie = createFakeLoggedInCookie();
+    //const rteCookie = Cookies.get("rte");
+    //add it to the user data
+    const rteCookie = createFakeLoggedInCookie();
     console.log(rteCookie)
     if(rteCookie != undefined){
       return true;

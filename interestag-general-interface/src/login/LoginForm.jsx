@@ -76,7 +76,7 @@ function LoginForm() {
       <br />
       <Button
         onClick={handleLoginSubmit}
-        className="signin-button"
+        className="custom-fab-button"
         style={styles.button}
       >
         Sign in
