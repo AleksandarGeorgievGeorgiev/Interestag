@@ -68,9 +68,10 @@ function CreateEventForm(){
                 native
                 value={values.publicity}
                 onChange={handleChange}
+                className="publicity-picker"
                 name="publicity"
                 inputProps={{
-                    id: 'age-native-required',
+                    id: 'publicity',
                 }}
                 >
                 <option aria-label="None" value="" />

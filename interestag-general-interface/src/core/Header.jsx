@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../resources/TestGraphTablet.svg';
+import logo from '../resources/TestGraphTablet.png';
 
 function Header() {
   return (

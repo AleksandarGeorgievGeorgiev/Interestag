@@ -67,10 +67,32 @@ code {
   bottom: 0;
   width: 100%;
 }
+.MuiButtonBase-root .MuiListItem-root .MuiListItem-button .listItem {
+  background-color:#9984d4;
+}
+
+.MuiInputBase-root{
+  width: 200px;
+}
 
 .login-screen{
   width: 500px;
   height: 695px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+.list-group-item{
+  background-color: #bfb2e2;
+  margin: 5px;
+  width: auto;
+  height: 15vmin;
+  border-radius: 10px;
 }
 
 .MuiPaper-root.alert{
@@ -80,7 +102,7 @@ code {
 }
 
 .app-logo {
-  height: 30vmin;
+  height: 35vmin;
   pointer-events: none;
 }
 
