@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { CirclePicker } from 'react-color';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const InterestField = ({ index, name, color, valueChanged, deleteInterest }) => {
+const InterestField = ({ index, name, color, valueChanged, deleteInterest, disabled }) => {
   const [colorPickerOpen, setOpen] = useState(false);
 
   const colorChanged = (value) => {
@@ -27,33 +27,25 @@ const InterestField = ({ index, name, color, valueChanged, deleteInterest }) => 
           name="name"
           label="Interest Name"
           type="text"
+          disabled={disabled}
           value={name}
           onChange={textChanged}
         />
         <div style={{ alignSelf: 'center', marginTop: '10px', display: 'flex' }} >
           <div
             style={{
-              padding: '5px',
-              background: '#fff',
-              borderRadius: '1px',
-              boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-              // display: 'inline-block',
-              cursor: 'pointer',
+              height: '20px',
+              width: '20px',
+              backgroundColor: color ? color : '#ccc',
+              borderRadius: '50%',
+              display: 'inline-block',
+              cursor: disabled ? 'default' : 'pointer',
             }}
 
-            onClick={() => setOpen(!colorPickerOpen)}
+            onClick={() => !disabled && setOpen(!colorPickerOpen)}
           >
-            <div
-              style={{
-                width: '36px',
-                height: '14px',
-                borderRadius: '2px',
-                backgroundColor: `${color}`,
-              }}
-            >
-            </div>
           </div>
-          <DeleteIcon style={{ marginLeft: '15px', cursor: 'pointer' }} onClick={() => deleteInterest(index)} />
+          {!disabled && <DeleteIcon style={{ marginLeft: '15px', cursor: 'pointer' }} onClick={() => deleteInterest(index)} />}
         </div>
       </div>
       {colorPickerOpen &&

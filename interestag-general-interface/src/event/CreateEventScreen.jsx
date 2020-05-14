@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 
-import Fab from '@material-ui/core/Fab';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import Button from '@material-ui/core/Button';
+import { MobileStepper } from '@material-ui/core';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import { CreateEventForm } from './CreateEventForm';
 import { CreateInterestsForm } from './CreateInterestsForm';
 import { Header } from '../core/Header';
 import { useFormHandler } from '../register/useFormHandler';
-import { MobileStepper } from '@material-ui/core';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-
+import { CreateEventOverview } from './CreateEventOverview';
 
 function CreateEventScreen() {
   const [activeStep, setStep] = useState(0);
@@ -60,17 +58,12 @@ function CreateEventScreen() {
           addInterest={addInterest}
         />
       );
-      // case 2: return (
-      //   <>
-      //     <CreateEventForm {...createEventFormHandler} />
-      //     <CreateInterestsForm
-      //       interests={interests}
-      //       valueChanged={valueChanged}
-      //       deleteInterest={deleteInterest}
-      //       addInterest={addInterest}
-      //     />
-      //   </>
-      // )
+      case 2: return (
+        <CreateEventOverview 
+          eventDetails={createEventFormHandler.values} 
+          interests={interests} 
+          createEvent={createEvent} />
+      )
     }
   }
 
@@ -80,25 +73,14 @@ function CreateEventScreen() {
       <br />
       {renderFormByStep()}
       <br />
-      {activeStep === 2 && <Fab
-        variant="extended"
-        size="medium"
-        color="primary"
-        aria-label="add"
-        className="custom-fab-button"
-        onClick={createEvent()}
-      >
-        'Create event'
-        <ArrowForwardIosIcon className="forwardArrowIcon" />
-      </Fab>}
 
       <MobileStepper
         variant="dots"
         position="static"
         activeStep={activeStep}
-        steps={2}
+        steps={3}
         nextButton={
-          <Button size="small" onClick={() => setStep(activeStep + 1)} disabled={activeStep === 1}>
+          <Button size="small" onClick={() => setStep(activeStep + 1)} disabled={activeStep === 2}>
             Next
             <KeyboardArrowRight />
           </Button>

@@ -5,10 +5,11 @@ const useFormHandler = (callback, validate) => {
     const [errors, setErrors] = useState({})
 
     const handleChange = (event) => {
-        const {name, value} = event.target
+        const {name, value} = event.target;
+        
         setValues({
             ...values, [name]: value
-        })
+        });
     }
 
     const handleSubmit = (event) => {
