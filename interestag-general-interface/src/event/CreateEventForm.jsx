@@ -22,6 +22,7 @@ function CreateEventForm({ handleChange, handleSubmit, values, errors }) {
     //     // .catch((err) => console.log(err));
   }
 
+<<<<<<< HEAD
   return (
     <>
       <TextField
@@ -70,6 +71,73 @@ function CreateEventForm({ handleChange, handleSubmit, values, errors }) {
       </Select>
     </>
   )
+=======
+    return(
+        <form>
+            <TextField
+                id="standard-description-flexible"
+                name="name"
+                multiline
+                label="Event Name"
+                value={values.name}
+                onChange={handleChange}
+            />
+            <br />
+            <br />
+            <TextField
+                id="standard-multiline-static"
+                label="Multiline"
+                multiline
+                name="description"
+                label="Description"
+                value={values.email}
+                onChange={handleChange}
+            />
+            <br />
+            <br />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <DateTimePicker
+                    label="DateTimePicker"
+                    name="event_date"
+                />
+            </MuiPickersUtilsProvider>
+            <br />
+            <br />
+            <InputLabel id="demo-simple-select-helper-label">Event publicity</InputLabel>
+            <Select
+                native
+                value={values.publicity}
+                onChange={handleChange}
+                className="publicity-picker"
+                name="publicity"
+                inputProps={{
+                    id: 'publicity',
+                }}
+                >
+                <option aria-label="None" value="" />
+                <option value={0}>public</option>
+                <option value={1}>private</option>
+                <option value={2}>unlisted</option>
+            </Select>
+            <br />
+            <br />
+            <Fab
+            variant="extended"
+            size="medium"
+            color="primary"
+            aria-label="add"
+            className="custom-fab-button"
+            >
+            Create interests
+            <ArrowForwardIosIcon className="forwardArrowIcon"  />
+            </Fab>
+                {/* <Button className="signup-button" onClick={handleSubmit}>
+                    Register
+                </Button> */}
+            <br />
+        </form>
+    )
+>>>>>>> 634168fb2dd9903acbec3b34985b759696b85013
 }
 
 export { CreateEventForm }
