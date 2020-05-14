@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Fab from '@material-ui/core/Fab';
 import Button from '@material-ui/core/Button';
 import { MobileStepper } from '@material-ui/core';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -10,6 +11,7 @@ import { CreateInterestsForm } from './CreateInterestsForm';
 import { Header } from '../core/Header';
 import { useFormHandler } from '../register/useFormHandler';
 import { CreateEventOverview } from './CreateEventOverview';
+import { QontoStepper } from './QontoStepper';
 
 function CreateEventScreen() {
   const [activeStep, setStep] = useState(0);
@@ -45,10 +47,22 @@ function CreateEventScreen() {
     console.log(interests, eventDetails);
   }
 
+  const stepClicked = (index) => {
+    setStep(index);
+  }
+
+  const nextStep = () => {
+    setStep(activeStep + 1);
+  }
+
+  const prevStep = () => {
+    setStep(activeStep - 1);
+  }
+
   const renderFormByStep = () => {
     switch (activeStep) {
       case 0: return (
-        <CreateEventForm {...createEventFormHandler} />
+        <CreateEventForm {...createEventFormHandler} nextStep={nextStep}/>
       );
       case 1: return (
         <CreateInterestsForm
@@ -56,12 +70,15 @@ function CreateEventScreen() {
           valueChanged={valueChanged}
           deleteInterest={deleteInterest}
           addInterest={addInterest}
+          nextStep={nextStep}
+          prevStep={prevStep}
         />
       );
       case 2: return (
         <CreateEventOverview 
           eventDetails={createEventFormHandler.values} 
-          interests={interests} 
+          interests={interests}
+          prevStep={prevStep}
           createEvent={createEvent} />
       )
     }
@@ -71,29 +88,9 @@ function CreateEventScreen() {
     <div className="body">
       <Header />
       <br />
+      <QontoStepper activeStep={activeStep} stepClicked={stepClicked} />
       {renderFormByStep()}
       <br />
-
-      <MobileStepper
-        variant="dots"
-        position="static"
-        activeStep={activeStep}
-        steps={3}
-        nextButton={
-          <Button size="small" onClick={() => setStep(activeStep + 1)} disabled={activeStep === 2}>
-            Next
-            <KeyboardArrowRight />
-          </Button>
-        }
-        backButton={
-          <Button size="small" onClick={() => setStep(activeStep - 1)} disabled={activeStep === 0}>
-            <KeyboardArrowLeft />
-            Back
-          </Button>
-        }
-      >
-      </MobileStepper>
-
     </div>
   );
 }

@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 
-import { useFormHandler } from '../register/useFormHandler';
+import { BlockPicker } from 'react-color';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import Fab from '@material-ui/core/Fab';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import { TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { BlockPicker } from 'react-color';
-import { InterestField } from './InterestField';
 import AddIcon from '@material-ui/icons/Add';
 
-const CreateInterestsForm = ({ interests, addInterest, deleteInterest, valueChanged }) => {
+import { InterestField } from './InterestField';
+import { useFormHandler } from '../register/useFormHandler';
+
+const CreateInterestsForm = ({ interests, addInterest, deleteInterest, valueChanged, nextStep, prevStep }) => {
 
   return (
     <>
       {interests.map((interest, index) => 
         (
           <InterestField 
+            key={index}
             {...interest} 
             index={index} 
             valueChanged={valueChanged}
@@ -28,7 +33,26 @@ const CreateInterestsForm = ({ interests, addInterest, deleteInterest, valueChan
         <AddIcon />
       </Button>
       <br />
-      
+      <Fab
+        variant="extended"
+        size="medium"
+        color="primary"
+        aria-label="add"
+        className={'custom-fab-button'}
+        onClick={prevStep}>
+        <ArrowBackIosIcon style={{ color: '#fff' }} fontSize={'small'}/>
+        Back
+      </Fab>
+      <Fab
+        variant="extended"
+        size="medium"
+        color="primary"
+        aria-label="add"
+        className={'custom-fab-button'}
+        onClick={nextStep}>
+        Next
+        <ArrowForwardIosIcon style={{ color: '#fff' }} fontSize={'small'}/>
+      </Fab>
     </>
   )
 }
