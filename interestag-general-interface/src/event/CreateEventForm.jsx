@@ -52,7 +52,11 @@ function CreateEventForm({ handleChange, handleSubmit, values, errors, nextStep 
           <DateTimePicker
             label="DateTimePicker"
             name="event_date"
-            value={values['event_date']} onChange={date => handleChange({ target: { name: 'event_date', value: date.toString() } })}
+            ampm={false}
+            autoOk={true}
+            disablePast={true}
+            format={'dd/MMMM/yyyy HH:mm'}
+            value={values['event_date'] ? values['event_date'] : Date.now()} onChange={date => handleChange({ target: { name: 'event_date', value: date.toString() } })}
           />
         </MuiPickersUtilsProvider>
         <br />
@@ -80,7 +84,7 @@ function CreateEventForm({ handleChange, handleSubmit, values, errors, nextStep 
         aria-label="add"
         className={'custom-fab-button'}
         onClick={nextStep}>
-        Create event
+          Next
         <ArrowForwardIosIcon style={{ color: '#fff' }} fontSize={'small'} />
       </Fab>
     </>
