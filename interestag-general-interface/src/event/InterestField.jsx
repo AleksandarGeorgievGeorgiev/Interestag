@@ -6,11 +6,13 @@ import Button from '@material-ui/core/Button';
 import { CirclePicker } from 'react-color';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+const COLOR_SET = ["#ff5722", "#03a9f4", "#ffc107", "#673ab7", "#009688", "#4caf50"]
+
 const InterestField = ({ index, name, color, valueChanged, deleteInterest, disabled }) => {
   const [colorPickerOpen, setOpen] = useState(false);
 
   const colorChanged = (value) => {
-    valueChanged(index, { color: value.hex })
+    valueChanged(index, { color: value.hex });
     setOpen(false);
   }
 
@@ -53,7 +55,7 @@ const InterestField = ({ index, name, color, valueChanged, deleteInterest, disab
           <CirclePicker
             color={`${color}`}
             onChange={colorChanged}
-            colors={["#ff5722", "#03a9f4", "#ffc107", "#673ab7", "#009688", "#4caf50"]}
+            colors={COLOR_SET}
           />
         </div>}
     </div>
