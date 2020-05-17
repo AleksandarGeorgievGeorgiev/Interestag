@@ -26,7 +26,7 @@ function RegisterForm() {
   function submit() {
     console.log(values)
     axios
-      .post(`${baseUrl}auth/register/`, values)
+      .post(`${baseUrl}auth/register/`, values, { withCredentials: true })
       .then((res) => { authenticateUser(values); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   }

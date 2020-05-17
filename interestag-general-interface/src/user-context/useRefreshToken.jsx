@@ -6,12 +6,12 @@ import { UserContext } from './UserContextProvider';
 const useRefreshToken = () => {
   const [data, setData] = useState();
   const baseUrl = "http://localhost:8000/api/";
-  const { handleRegister } = useContext(UserContext);
+  const { authenticateUser } = useContext(UserContext);
 
   const handleRefreshToken = () => {
     return axios
-      .post(`${baseUrl}auth/token/refresh-jwt/`, {})
-      .then((res) => res)
+      .post(`${baseUrl}auth/token/refresh-jwt/`, {}, {withCredentials: true})
+      .then((res) => authenticateUser(res))
       .catch((err) => Promise.reject(err));
   }
 

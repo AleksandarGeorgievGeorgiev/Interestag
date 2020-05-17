@@ -46,29 +46,26 @@ const UserContextProvider = ({ children }) => {
   });
 
   const authenticateUser = (response) => {
-    createFakeCookie(response);
-    createFakeLoggedInCookie();
-
-    const jwt = JSON.parse(window.atob(Cookies.get('jwt').trim()));
-    const refreshToken = JSON.parse(window.atob(Cookies.get('rte').trim()));
-    const userData = {
-      ...jwt,
-      refreshToken: refreshToken.expires
-    }
+    const jwtCookie = Cookies.get('jwt');
+    const decoded = window.atob(jwtCookie.trim().split('.')[1]);
+    const userData = JSON.parse(decoded);
 
     clientStorage.saveInStorage('currentUser', userData);
     setUserData(userData);
   };
 
   const deauthenticateUser = () => {
-    clientStorage.removeFromStorage('currentUser'); 
-    setUserData({}); //TEST ONLY
-    // axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {})
-    //.then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {}, {withCredentials: true})
+    .then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
   }
 
   const isAuthenticated = () => {
-    return currentUser.refreshToken ? Date.now() < Date.parse(currentUser.refreshToken) : false;
+    const rteCookie = Cookies.get('rte');
+    return rteCookie ? true : false;
+  }
+
+  const isJwtFresh = () => {
+    return currentUser.exp ? currentUser.exp > Date.now() : false;
   }
 
   return (
@@ -76,7 +73,8 @@ const UserContextProvider = ({ children }) => {
       currentUser,
       isAuthenticated,
       authenticateUser,
-      deauthenticateUser
+      deauthenticateUser,
+      isJwtFresh,
     }}>
       {children}
     </UserContext.Provider>

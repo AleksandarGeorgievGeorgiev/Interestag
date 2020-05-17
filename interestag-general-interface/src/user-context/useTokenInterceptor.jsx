@@ -7,7 +7,7 @@ import { UserContext } from './UserContextProvider';
 import { useRefreshToken } from './useRefreshToken';
 
 const useTokenInterceptor = () => {
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isJwtFresh } = useContext(UserContext);
   const handleRefreshToken = useRefreshToken();
   const navigationHistory = useHistory();
   let activeInterceptor = {};
@@ -16,12 +16,13 @@ const useTokenInterceptor = () => {
     activeInterceptor = axios.interceptors.request.use((config) => {
       if(config.url.includes('/auth/login/') 
         || config.url.includes('/auth/register/')
-        || config.url.includes('/auth/token/refresh-jwt/')) {
+        || config.url.includes('/auth/token/refresh-jwt/')
+        || config.url.includes('/api/auth/facebook-auth/')) {
           
           return config;
       }
       
-      if (!isAuthenticated()) {
+      if (!isJwtFresh()) {
         return handleRefreshToken()
           .then((res) => config)
           .catch((err) => {

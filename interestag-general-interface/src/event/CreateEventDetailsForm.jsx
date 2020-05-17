@@ -52,9 +52,9 @@ function CreateEventDetailsForm({ handleChange, handleSubmit, values, errors, ne
             ampm={false}
             autoOk={true}
             disablePast={true}
-            format={'dd/MMMM/yyyy HH:mm'}
+            format={'yyyy-MM-dd hh:mm'}
             value={values['eventDate'] ? values['eventDate'] : null}
-            onChange={date => handleChange({ target: { name: 'eventDate', value: date.toString() } })}
+            onChange={date => handleChange({ target: { name: 'eventDate', value: date } })}
           />
         </MuiPickersUtilsProvider>
         <br />
@@ -80,9 +80,9 @@ function CreateEventDetailsForm({ handleChange, handleSubmit, values, errors, ne
             name="publicity"
           >
             <option value=""></option>
-            <option value={0}>Public</option>
-            <option value={1}>Private</option>
-            <option value={2}>Unlisted</option>
+            <option value={1}>Public</option>
+            <option value={2}>Private</option>
+            <option value={3}>Unlisted</option>
           </Select>
         </FormControl>
       </div>
