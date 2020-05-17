@@ -19,22 +19,22 @@ const createFakeCookie = ({ username }) => {
     userId: 1,
     username: username,
     permissions: [],
-    exp: Date.now().valueOf() + 5*60000,
+    jwt: new Date(Date.now() + 5*60000).toString(),
   }
 
-  const cookie = `jwt=${window.btoa(JSON.stringify(jwt))}; expires=${Date().toString()}; Max-Age=300; Path=/`;
-  
-  return cookie;
+  Cookies.set('jwt', 
+    window.btoa(JSON.stringify(jwt)),
+    { expires: new Date(Date.now() + 5*60000) });
 }
 
 const createFakeLoggedInCookie = () => {
-  const rte = {
-    exp: Date.now().valueOf() + 3*60000
+  const refreshToken = {
+    expires: new Date(Date.now() + 30*24*60*60*60000).toString()
   }
-
-  const cookie = `rte=${window.btoa(JSON.stringify(rte))}; expires=${Date().toString()}; Max-Age=300; Path=/`;
-
-  return cookie;
+  
+  Cookies.set('rte', 
+    window.btoa(JSON.stringify(refreshToken)),
+    { expires: new Date(Date.now() + 30*24*60*60*60000) });
 }
 
 const UserContextProvider = ({ children }) => {
@@ -46,24 +46,19 @@ const UserContextProvider = ({ children }) => {
   });
 
   const authenticateUser = (response) => {
-    const fakeCookie = createFakeCookie(response); //TEST only
-    const userPayload = fakeCookie.split(';')[0].trim().split('=')[1];
-    const userData = JSON.parse(window.atob(userPayload));
+    createFakeCookie(response);
+    createFakeLoggedInCookie();
+
+    const jwt = JSON.parse(window.atob(Cookies.get('jwt').trim()));
+    const refreshToken = JSON.parse(window.atob(Cookies.get('rte').trim()));
+    const userData = {
+      ...jwt,
+      refreshToken: refreshToken.expires
+    }
 
     clientStorage.saveInStorage('currentUser', userData);
     setUserData(userData);
   };
-
-  const isLoggedIn = () => {
-    //const rteCookie = Cookies.get("rte");
-    //add it to the user data
-    const rteCookie = createFakeLoggedInCookie();
-    console.log(rteCookie)
-    if(rteCookie != undefined){
-      return true;
-    } 
-    return false;
-  }
 
   const deauthenticateUser = () => {
     clientStorage.removeFromStorage('currentUser'); 
@@ -73,13 +68,12 @@ const UserContextProvider = ({ children }) => {
   }
 
   const isAuthenticated = () => {
-    return currentUser.exp ? Date.now() < currentUser.exp : false;
+    return currentUser.refreshToken ? Date.now() < Date.parse(currentUser.refreshToken) : false;
   }
 
   return (
     <UserContext.Provider value={{ 
       currentUser,
-      isLoggedIn,
       isAuthenticated,
       authenticateUser,
       deauthenticateUser

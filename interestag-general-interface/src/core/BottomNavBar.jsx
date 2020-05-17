@@ -10,14 +10,13 @@ import HomeIcon from '@material-ui/icons/Home';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SearchIcon from '@material-ui/icons/Search';
 
 import { UserContext } from '../user-context/UserContextProvider';
 import { useTokenInterceptor } from '../user-context/useTokenInterceptor';
 
 function BottomNavBar() {
-  const { currentUser, isAuthenticated, isLoggedIn, deauthenticateUser } = useContext(UserContext);
+  const { currentUser, isAuthenticated, deauthenticateUser } = useContext(UserContext);
   const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
   
   useEffect(() => {
@@ -37,7 +36,6 @@ function BottomNavBar() {
           <BottomNavigationAction component={Link} to="/discover" label="Discover" icon={<SearchIcon />} />
           <BottomNavigationAction component={Link} to="/" label="Add" icon={<AddIcon />} />
           <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
-          <BottomNavigationAction onClick={deauthenticateUser} label="Logout" icon={<ExitToAppIcon />} />
         </BottomNavigation>
       )
     }

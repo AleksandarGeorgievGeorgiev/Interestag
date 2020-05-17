@@ -18,32 +18,17 @@ import { LoginForm } from './login/LoginForm';
 
 function App() {
   const testName = 'Welcome to ProEp';
-  const { currentUser, isAuthenticated, isLoggedIn } = useContext(UserContext);
+  const { currentUser, isAuthenticated } = useContext(UserContext);
 
   const renderRoutes = () => {
-    // if (isAuthenticated()) {
-    //   return (
-    //     <Switch>
-    //       {/* <Route exact path="/" ><Home /></Route>
-    //       <Route path="/profile/:id" render={<PrivateRoute component={Profile}/>}></Route> */}
-          
-    //       <PrivateRoute authed={isAuthenticated()} path="/profile/:id" component={Profile}/>
-    //       <PrivateRoute authed={isLoggedIn()} exact path="/" component={Home}/>
-    //       {/* <Redirect from="/*" to="/login" /> */}
-    //     </Switch>
-    //   );
-    // }
-
     return (
       <Switch>
-        <PrivateRoute authed={isLoggedIn()} path="/profile/:id" component={Profile}/>
-        <PrivateRoute authed={isLoggedIn()} exact path="/" component={Home}/>
-        <PrivateRoute authed={isLoggedIn()} path="/event" component={CreateEventScreen}/>
+        <PrivateRoute authed={isAuthenticated()} path="/profile/:id" component={Profile}/>
+        <Route authed={isAuthenticated()} exact path="/" component={Home}/>
+        <PrivateRoute authed={isAuthenticated()} path="/event" component={CreateEventScreen}/>
         <Route path="/discover" ><DiscoverEventScreen /></Route> 
-        {/* <Route exact path="/" ><Home /></Route> */}
-        <EnforceAnonymousRoute authed={isLoggedIn()} path="/login" component={LoginScreen}/>
-        <EnforceAnonymousRoute authed={isLoggedIn()} path="/register" component={RegisterScreen}/>
-        {/* <Redirect from="/profile/*" to="/login" /> */}
+        <EnforceAnonymousRoute authed={isAuthenticated()} path="/login" component={LoginScreen}/>
+        <EnforceAnonymousRoute authed={isAuthenticated()} path="/register" component={RegisterScreen}/>
       </Switch>
     );
   };
