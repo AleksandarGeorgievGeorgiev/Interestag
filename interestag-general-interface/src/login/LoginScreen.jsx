@@ -6,7 +6,7 @@ function LoginScreen() {
   return (
     <div className="body">
       <Header />
-      <LoginForm />
+      <LoginForm/>
     </div>
   );
 }

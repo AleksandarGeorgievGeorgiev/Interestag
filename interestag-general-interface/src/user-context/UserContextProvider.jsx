@@ -64,7 +64,7 @@ const UserContextProvider = ({ children }) => {
     clientStorage.removeFromStorage('currentUser'); 
     setUserData({}); //TEST ONLY
     // axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {})
-    //   .then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
+    //.then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
   }
 
   const isAuthenticated = () => {

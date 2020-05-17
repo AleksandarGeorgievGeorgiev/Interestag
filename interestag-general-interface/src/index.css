@@ -118,3 +118,55 @@ ul {
   font-weight: bold;
   height: 36px;
 }
+.profilepic{
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.name{
+font-size: 30px;
+line-height: 150%;
+}
+
+.username{
+font-size: 18px;
+line-height: 150%;
+color: #C7ABBA;
+}
+
+.eventBox{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: lightgreen;
+  border-radius: 25px;
+  width: 90%;
+  margin: 5px auto;
+}
+
+.eventBox div{
+  display: inline;
+}
+
+.date{
+  float: left;
+  font-size: 14px;
+  margin-left: 13px;
+  margin-top: 6px;
+}
+.eventName{
+  float: none;
+  font-size: 20px;
+}
+
+.edit{
+  float: right;
+  size: 10px;
+  background-color: transparent;
+  margin-right: 10px;
+  margin-top: -3px;
+  border: transparent;
+
+}
