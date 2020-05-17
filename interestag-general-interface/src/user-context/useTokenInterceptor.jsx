@@ -16,7 +16,8 @@ const useTokenInterceptor = () => {
     activeInterceptor = axios.interceptors.request.use((config) => {
       if(config.url.includes('/auth/login/') 
         || config.url.includes('/auth/register/')
-        || config.url.includes('/auth/token/refresh-jwt/')) {
+        || config.url.includes('/auth/token/refresh-jwt/')
+        || config.url.includes('/api/auth/facebook-auth/')) {
           
           return config;
       }
