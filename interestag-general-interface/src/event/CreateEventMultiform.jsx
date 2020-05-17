@@ -36,17 +36,25 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
   const createEvent = () => {
     const eventDetails = createEventFormHandler.values;
 
-    // axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
-    //   'name': eventDetails.name,
-    //   'descritpion': eventDetails.descritpion,
-    //   'event_date': eventDetails.eventDate,
-    //   'interest_selection_count': eventDetails.topInterests,
-    //   'publicity': eventDetails.publicity
-    // }).then(res => {
-    //   axios.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, {
-
-    //   })
-    // });
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
+      'name': eventDetails.name,
+      'descritpion': eventDetails.descritpion,
+      'event_date': eventDetails.eventDate,
+      'interest_selection_count': eventDetails.topInterests,
+      'publicity': eventDetails.publicity
+    })
+    .then(res =>
+      axios.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
+        interests.map(interest => { 
+          return { 
+            event: res.data.id,
+            ...interest
+          }
+        }
+      ))
+    )
+    .then(res => console.log(res)) //TODO: Navigate to created event
+    .catch(err => console.log(err)); //TODO: Display error message
   }
 
   const renderFormByStep = () => {
