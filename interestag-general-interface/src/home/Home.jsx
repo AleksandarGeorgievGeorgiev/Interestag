@@ -13,6 +13,8 @@ const Home = () => {
     axios.get(`${process.env.REACT_APP_BASEURL}/api/test`)
       .then((res) => setHello(res.data))
       .catch((err) => console.log(err));
+
+    console.log(document.cookie);
   };
 
   return (

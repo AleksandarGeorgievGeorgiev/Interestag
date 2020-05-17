@@ -8,7 +8,7 @@ import { CreateEventOverview } from './CreateEventOverview';
 import { CreateEventDetailsForm } from './CreateEventDetailsForm';
 
 const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
-  const [interests, setInterests] = useState([{ name: '', color: '' }]);
+  const [interests, setInterests] = useState([{ name: '', colour: '' }]);
   const createEventFormHandler = useFormHandler();
 
   const addInterest = () => {
@@ -33,25 +33,30 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
     setInterests(tempInterests);
   }
 
+  const parseDate = (dateObject) => {
+    return `${dateObject.getFullYear()}-${dateObject.getMonth()}-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}`;
+  }
+
   const createEvent = () => {
     const eventDetails = createEventFormHandler.values;
 
     axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
       'name': eventDetails.name,
       'descritpion': eventDetails.descritpion,
-      'event_date': eventDetails.eventDate,
+      'event_date': parseDate(eventDetails.eventDate),
       'interest_selection_count': eventDetails.topInterests,
       'publicity': eventDetails.publicity
-    })
+    }, {withCredentials: true})
     .then(res =>
       axios.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
         interests.map(interest => { 
           return { 
             event: res.data.id,
-            ...interest
+            name: interest.name,
+            colour: interest.colour.substring(1, 6)
           }
         }
-      ))
+      ), {withCredentials: true})
     )
     .then(res => console.log(res)) //TODO: Navigate to created event
     .catch(err => console.log(err)); //TODO: Display error message
