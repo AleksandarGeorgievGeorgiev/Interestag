@@ -64,12 +64,17 @@ const UserContextProvider = ({ children }) => {
     return rteCookie ? true : false;
   }
 
+  const isJwtFresh = () => {
+    return currentUser.exp ? currentUser.exp > Date.now() : false;
+  }
+
   return (
     <UserContext.Provider value={{ 
       currentUser,
       isAuthenticated,
       authenticateUser,
-      deauthenticateUser
+      deauthenticateUser,
+      isJwtFresh,
     }}>
       {children}
     </UserContext.Provider>
