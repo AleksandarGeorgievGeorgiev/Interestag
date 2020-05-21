@@ -34,12 +34,12 @@ function DiscoverEventScreen() {
     <div className="body">
       <div>
         {events.map((item) => (
-          <Card>
+          <Card key={item.id}>
             <div className="list-group-item">
               <Ripples>
                 <CardContent onClick={() => clickedEvent(item.id)}>
                   <Typography>
-                    key={item.id} {item.name} | {new Date(item.event_date).toDateString()}
+                    {item.name} | {new Date(item.event_date).toDateString()}
                   </Typography>
                 </CardContent>
               </Ripples>
