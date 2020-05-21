@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
-=======
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
->>>>>>> c65f4ef4e9456e4f0bf71d71d4e791c86038c91f
 
 import { Header } from "../core/Header";
 import axios from "axios";
@@ -44,7 +39,7 @@ function DiscoverEventScreen() {
               <Ripples>
                 <CardContent onClick={() => clickedEvent(item.id)}>
                   <Typography>
-                    {item.name} | {new Date(item.event_date).toDateString()}
+                    key={item.id} {item.name} | {new Date(item.event_date).toDateString()}
                   </Typography>
                 </CardContent>
               </Ripples>
@@ -56,8 +51,4 @@ function DiscoverEventScreen() {
   );
 }
 
-<<<<<<< HEAD
 export { DiscoverEventScreen };
-=======
-export { DiscoverEventScreen };
->>>>>>> c65f4ef4e9456e4f0bf71d71d4e791c86038c91f
