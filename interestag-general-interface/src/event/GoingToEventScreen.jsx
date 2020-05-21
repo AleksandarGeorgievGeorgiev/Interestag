@@ -15,25 +15,27 @@ const GoingToEventScreen = () => {
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going_to/`)
       .then((res) => {
-        console.log(res.data);
         setEvents(res.data);
       });
   }, []);
 
-  const clickedEvent = (itemId) => {
-    navigationHistory.push(`/event/${itemId}/`);
+  const clickedEvent = (event) => {
+    navigationHistory.push({
+      pathname: `/event/${event.id}/`, 
+      state: { ...event }
+    });
   };
 
   return (
     <div className="body">
       <div>
-        {events.map((item) => (
-          <Card key={item.id}>
+        {events.map((event, index) => (
+          <Card key={event.id}>
             <div className="going-to-items">
               <Ripples>
-                <CardContent onClick={() => clickedEvent(item.id)}>
+                <CardContent onClick={() => clickedEvent(event)}>
                   <Typography>
-                    {item.name} | {new Date(item.event_date).toDateString()}
+                    {event.name} | {new Date(event.event_date).toDateString()}
                   </Typography>
                 </CardContent>
               </Ripples>
