@@ -28,7 +28,7 @@ function DiscoverEventScreen() {
   }, []);
 
   const clickedEvent = (itemId) => {
-    // navigationHistory.push(`/event/${itemId}/`);
+    navigationHistory.push(`/event/${itemId}/`);
   }
 
   return (
