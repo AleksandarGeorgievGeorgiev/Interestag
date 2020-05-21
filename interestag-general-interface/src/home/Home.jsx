@@ -19,7 +19,6 @@ const Home = () => {
 
   return (
     <div className="body">
-      <Header />
       <h1>Home</h1>
       {hello}
       <br />

@@ -21,8 +21,6 @@ function CreateEventScreen() {
 
   return (
     <div className="body">
-      <Header />
-      <br />
       <QontoStepper activeStep={activeStep} stepClicked={stepClicked} />
       {<CreateEventMultiform activeStep={activeStep} nextStep={nextStep} prevStep={prevStep} />}
       <br />

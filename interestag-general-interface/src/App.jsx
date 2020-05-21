@@ -39,8 +39,7 @@ function App() {
   return (
 
     <div className="App">
-      <AppTopBar pageName={testName} />
-      <br />
+      <AppTopBar/>
       <BrowserRouter>
         {renderRoutes()}
       <BottomNavBar/>
