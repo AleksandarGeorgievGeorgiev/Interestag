@@ -88,7 +88,7 @@ ul {
 
 
 .list-group-item{
-  background-color: #bfb2e2;
+  background-color: #d1c9e7;
   margin: 5px;
   width: auto;
   height: 15vmin;
@@ -109,7 +109,7 @@ ul {
 }
 
 .app-logo {
-  height: 12vmin;
+  height: 15vmin;
   pointer-events: none;
 }
 
@@ -176,4 +176,8 @@ color: #C7ABBA;
   margin-top: -3px;
   border: transparent;
 
+}
+
+.going-to-items{
+  background-color: #c6ece3;
 }

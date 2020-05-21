@@ -8,6 +8,7 @@ import { LoginScreen } from './login/LoginScreen';
 import { RegisterScreen } from './register/RegisterScreen';
 import { CreateEventScreen } from './event/CreateEventScreen';
 import { DiscoverEventScreen } from './event/DiscoverEventScreen';
+import {GoingToEventScreen} from './event/GoingToEventScreen';
 
 import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
@@ -27,6 +28,7 @@ function App() {
         <PrivateRoute authed={isAuthenticated()} path="/profile/:id" component={Profile}/>
         <Route authed={isAuthenticated()} exact path="/" component={Home}/>
         <PrivateRoute authed={isAuthenticated()} path="/event" component={CreateEventScreen}/>
+        <PrivateRoute authed={isAuthenticated()} path="/attending" component={GoingToEventScreen}/>
         <Route path="/discover" ><DiscoverEventScreen /></Route> 
         <EnforceAnonymousRoute authed={isAuthenticated()} path="/login" component={LoginScreen}/>
         <EnforceAnonymousRoute authed={isAuthenticated()} path="/register" component={RegisterScreen}/>

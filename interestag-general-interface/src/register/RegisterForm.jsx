@@ -25,7 +25,7 @@ function RegisterForm() {
   function submit() {
     console.log(values)
     axios
-      .post(`${process.env.REACT_APP_BASEURL}auth/register/`, values)
+      .post(`${process.env.REACT_APP_BASEURL}/api/auth/register/`, values)
       .then((res) => { authenticateUser(values); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   }
