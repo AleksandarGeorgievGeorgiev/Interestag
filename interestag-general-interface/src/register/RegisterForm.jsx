@@ -19,14 +19,13 @@ function RegisterForm() {
     submit,
     validate,
   );
-  const baseUrl = 'http://localhost:8000/api/';
   const { authenticateUser } = useContext(UserContext);
   const navigationHistory = useHistory();
 
   function submit() {
     console.log(values)
     axios
-      .post(`${baseUrl}auth/register/`, values, { withCredentials: true })
+      .post(`${process.env.REACT_APP_BASEURL}auth/register/`, values)
       .then((res) => { authenticateUser(values); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   }

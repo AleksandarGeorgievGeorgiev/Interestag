@@ -12,18 +12,6 @@ import { DateTimePicker } from "@material-ui/pickers";
 import Select from '@material-ui/core/Select';
 
 function CreateEventDetailsForm({ handleChange, handleSubmit, values, errors, nextStep }) {
-
-  const baseUrl = 'http://localhost:8000/api/';
-  const { authenticateUser } = useContext(UserContext);
-  const navigationHistory = useHistory();
-
-  function submit() {
-    // axios
-    //     // .post(`${baseUrl}auth/register/`, values)
-    //     // .then((res) => { authenticateUser(values); navigationHistory.push('/') })
-    //     // .catch((err) => console.log(err));
-  }
-
   return (
     <>
       <div>

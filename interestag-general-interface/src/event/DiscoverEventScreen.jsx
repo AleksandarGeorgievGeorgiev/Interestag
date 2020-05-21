@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { Header } from '../core/Header';
 
@@ -7,25 +8,32 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 
 function DiscoverEventScreen() {
-    const events = ["event1", "event2", "event3","event4", "event5", "event6","event7", "event8", "event9"]
+  const [events, setEvents] = useState([]);
 
-    function listItemClicked(event){
-        console.log("clicked");
-    }
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_BASEURL}/api/event/discover/`)
+      .then(res => {
+        setEvents(res.data);
+      });
+  }, []);
 
-    return (
-      <div className="body">
-        <Header />
-        <div>
-            {events.map(item => (
-                <div onClick={listItemClicked} className="list-group-item">
-                    {item}
-                </div>
-            ))
-            }
-        </div>
-      </div>
-    );
+  function listItemClicked(event) {
+    console.log("clicked");
   }
-  
-  export { DiscoverEventScreen };
+
+  return (
+    <div className="body">
+      <Header />
+      <div>
+        {events.map(item => (
+          <div key={item.id} onClick={listItemClicked} className="list-group-item">
+            {item.id}
+          </div>
+        ))
+        }
+      </div>
+    </div>
+  );
+}
+
+export { DiscoverEventScreen };

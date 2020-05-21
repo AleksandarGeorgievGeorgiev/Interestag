@@ -10,7 +10,7 @@ const useRefreshToken = () => {
 
   const handleRefreshToken = () => {
     return axios
-      .post(`${baseUrl}auth/token/refresh-jwt/`, {}, {withCredentials: true})
+      .post(`${baseUrl}auth/token/refresh-jwt/`, {})
       .then((res) => authenticateUser(res))
       .catch((err) => Promise.reject(err));
   }

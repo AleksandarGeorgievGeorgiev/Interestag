@@ -14,6 +14,10 @@ const useTokenInterceptor = () => {
 
   const attachInterceptor = () => {
     activeInterceptor = axios.interceptors.request.use((config) => {
+      if(!config.withCredentials) {
+        config.withCredentials = true;
+      }
+
       if(config.url.includes('/auth/login/') 
         || config.url.includes('/auth/register/')
         || config.url.includes('/auth/token/refresh-jwt/')
