@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Header } from "../core/Header";
-
+import axios from "axios";
+import { useHistory } from 'react-router-dom';
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -10,28 +11,23 @@ import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Ripples from "react-ripples";
+import { EventDetailsScreen } from "./EventDetailsScreen";
+import { Route } from "react-router";
 
 function DiscoverEventScreen() {
-  const events = [
-    "event1event1event1",
-    "event2event2event2",
-    "event3event2event2",
-    "event4event2event2",
-    "event5event2",
-    "event6event2event2",
-    "event7event2event2event2",
-    "event8event2",
-    "event9event2event2",
-    "event7",
-    "event8event2event2",
-    "event9event2",
-    "event7event2",
-    "event8",
-    "event9",
-  ];
+  const [events, setEvents] = useState([]);
+  const navigationHistory = useHistory();
 
-  function listItemClicked(event) {
-    console.log("clicked");
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASEURL}/api/event/discover/`)
+      .then((res) => {
+        setEvents(res.data);
+      });
+  }, []);
+
+  const clickedEvent = (itemId) => {
+    navigationHistory.push(`/event/${itemId}/`);
   }
 
   return (
@@ -41,10 +37,10 @@ function DiscoverEventScreen() {
           <Card>
             <div className="list-group-item">
               <Ripples>
-                <CardContent
-                  onClick={listItemClicked}
-                >
-                  <Typography>{item}</Typography>
+                <CardContent onClick={() => clickedEvent(item.id)}>
+                  <Typography>
+                    {item.name} | {new Date(item.event_date).toDateString()}
+                  </Typography>
                 </CardContent>
               </Ripples>
             </div>

@@ -34,7 +34,7 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
   }
 
   const parseDate = (dateObject) => {
-    return `${dateObject.getFullYear()}-${dateObject.getMonth()}-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}`;
+    return `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}`;
   }
 
   const createEvent = () => {
