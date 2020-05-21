@@ -55,7 +55,7 @@ const UserContextProvider = ({ children }) => {
   };
 
   const deauthenticateUser = () => {
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {}, {withCredentials: true})
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, {})
     .then((res) => { clientStorage.removeFromStorage('currentUser'); setUserData({}); });
   }
 
@@ -65,7 +65,7 @@ const UserContextProvider = ({ children }) => {
   }
 
   const isJwtFresh = () => {
-    return currentUser.exp ? currentUser.exp > Date.now() : false;
+    return currentUser.exp ? currentUser.exp > Date.now()/1000 : false;
   }
 
   return (

@@ -29,7 +29,7 @@ const CreateEventOverview = ({ eventDetails, interests, createEvent, prevStep })
         name="date"
         label="Date"
         type="datetime-local"
-        value={eventDetails['event_date']}
+        value={eventDetails.eventDate}
         disabled={true}
       />
       <h3>Event Interests</h3>
