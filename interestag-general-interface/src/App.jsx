@@ -8,6 +8,8 @@ import { LoginScreen } from './login/LoginScreen';
 import { RegisterScreen } from './register/RegisterScreen';
 import { CreateEventScreen } from './event/CreateEventScreen';
 import { DiscoverEventScreen } from './event/DiscoverEventScreen';
+import { GoingToEventScreen } from './event/GoingToEventScreen';
+import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
 import { BottomNavBar } from './core/BottomNavBar';
 import { PrivateRoute } from './user-context/PrivateRoute'
