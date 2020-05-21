@@ -3,16 +3,34 @@ import React, { useContext } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import logo from '../resources/TestGraphTablet.png';
+import Slide from '@material-ui/core/Slide';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import { UserContext } from '../user-context/UserContextProvider';
 
-function AppTopBar({ pageName }) {
+function AppTopBar({ props }) {
   const { isAuthenticated, deauthenticateUser } = useContext(UserContext);
 
+  function HideOnScroll(props) {
+    const { children, window } = props;
+    // Note that you normally won't need to set the window ref as useScrollTrigger
+    // will default to window.
+    // This is only being set here because the demo is in an iframe.
+    const trigger = useScrollTrigger({ target: window ? window() : undefined });
+  
+    return (
+      <Slide appear={false} direction="down" in={!trigger}>
+        {children}
+      </Slide>
+    );
+  }
+
   return (
+    <HideOnScroll {...props}>
     <AppBar className="AppBar" style={{ flexDirection: 'row', justifyContent: 'center' }}>
-      <div style={{marginLeft: 'auto'}}>
-        <h3>{pageName}</h3>
+      <div className="app-top-bar-icon">
+        <img src={logo} alt="Logo" className="app-logo" />
       </div>
       <div style={{ marginLeft: 'auto' }}>
         {isAuthenticated() &&
@@ -20,6 +38,7 @@ function AppTopBar({ pageName }) {
         }
       </div>
     </AppBar>
+    </HideOnScroll>
   );
 }
 

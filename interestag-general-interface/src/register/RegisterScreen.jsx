@@ -6,8 +6,6 @@ import { Header } from '../core/Header';
 function RegisterScreen() {
   return (
     <div className="body">
-      <Header />
-      <br />
       <RegisterForm />
     </div>
   );

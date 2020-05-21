@@ -21,7 +21,7 @@ code {
 .MuiPaper-root.AppBar{
   text-align: center;
   position: fixed;
-  background-color: #9984d4;
+  background-color: #edeaf5;
 }
 
 .MuiSvgIcon-root{
@@ -93,6 +93,7 @@ ul {
   width: auto;
   height: 15vmin;
   border-radius: 10px;
+  text-align: left;
 }
 
 .MuiPaper-root.alert{
@@ -101,8 +102,14 @@ ul {
   text-align: center;
 }
 
+.app-top-bar-icon{
+  margin-left: 5px;
+  margin-top: 5px;
+  align-content: flex-start;
+}
+
 .app-logo {
-  height: 35vmin;
+  height: 12vmin;
   pointer-events: none;
 }
 
