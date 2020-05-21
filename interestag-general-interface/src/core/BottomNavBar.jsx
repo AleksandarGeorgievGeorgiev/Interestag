@@ -34,7 +34,7 @@ function BottomNavBar() {
         >
           <BottomNavigationAction component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />} />
           <BottomNavigationAction component={Link} to="/discover" label="Discover" icon={<SearchIcon />} />
-          <BottomNavigationAction component={Link} to="/event" label="Add" icon={<AddIcon />} />
+          <BottomNavigationAction component={Link} to="/event/create" label="Add" icon={<AddIcon />} />
           <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
         </BottomNavigation>
       )
