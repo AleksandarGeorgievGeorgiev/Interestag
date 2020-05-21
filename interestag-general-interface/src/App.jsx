@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 
-import { BrowserRouter, Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import { Home } from './home/Home';
 import { Profile } from './profile/Profile';
@@ -15,9 +15,17 @@ import { UserContext } from './user-context/UserContextProvider';
 import { EnforceAnonymousRoute } from './user-context/EnforceAnonymousRoute';
 import { EventDetailsScreen } from './event/EventDetailsScreen';
 
+import { useTokenInterceptor } from './user-context/useTokenInterceptor';
+
 function App() {
   const testName = 'Welcome to ProEp';
   const { isAuthenticated } = useContext(UserContext);
+  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
+  attachInterceptor();
+
+  useEffect(() => {
+    return () => detachInterceptor();
+  }, []);
   
   const renderRoutes = () => {
     return (
@@ -37,13 +45,10 @@ function App() {
   };
 
   return (
-
     <div className="App">
       <AppTopBar/>
-      <BrowserRouter>
         {renderRoutes()}
       <BottomNavBar/>
-      </BrowserRouter>
     </div>
   );
 }

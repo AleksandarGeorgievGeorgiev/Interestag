@@ -19,6 +19,7 @@ function DiscoverEventScreen() {
   const navigationHistory = useHistory();
 
   useEffect(() => {
+    console.log('discover');
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/event/discover/`)
       .then((res) => {
@@ -27,7 +28,7 @@ function DiscoverEventScreen() {
   }, []);
 
   const clickedEvent = (itemId) => {
-    navigationHistory.push(`/event/${itemId}/`);
+    // navigationHistory.push(`/event/${itemId}/`);
   }
 
   return (

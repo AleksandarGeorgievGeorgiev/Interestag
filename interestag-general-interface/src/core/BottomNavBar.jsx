@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -13,17 +13,9 @@ import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import SearchIcon from '@material-ui/icons/Search';
 
 import { UserContext } from '../user-context/UserContextProvider';
-import { useTokenInterceptor } from '../user-context/useTokenInterceptor';
 
 function BottomNavBar() {
-  const { currentUser, isAuthenticated, deauthenticateUser } = useContext(UserContext);
-  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
-  
-  useEffect(() => {
-    attachInterceptor();
-    
-    return () => detachInterceptor(); //TODO: Move somewhere else
-  })
+  const { currentUser, isAuthenticated } = useContext(UserContext);
 
   const renderNavBar = () => {
     if (isAuthenticated()) {
