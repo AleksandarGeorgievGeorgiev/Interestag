@@ -15,6 +15,7 @@ const GoingToEventScreen = () => {
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going_to/`)
       .then((res) => {
+        console.log(res.data);
         setEvents(res.data);
       });
   }, []);

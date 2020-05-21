@@ -23,19 +23,8 @@ const useStyles = makeStyles({
 });
 
 function BottomNavBar() {
-<<<<<<< HEAD
   const { currentUser, isAuthenticated } = useContext(UserContext);
-=======
   const classes = useStyles();
-  const { currentUser, isAuthenticated, deauthenticateUser } = useContext(UserContext);
-  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
-  
-  useEffect(() => {
-    attachInterceptor();
-    
-    return () => detachInterceptor(); //TODO: Move somewhere else
-  })
->>>>>>> d2515b493196ff8b9fefa774d527fa21edfbb6fd
 
   const renderNavBar = () => {
     if (isAuthenticated()) {
@@ -44,18 +33,11 @@ function BottomNavBar() {
           className="bottom-nav-custom-css"
           showLabels
         >
-<<<<<<< HEAD
-          <BottomNavigationAction component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />} />
-          <BottomNavigationAction component={Link} to="/discover" label="Discover" icon={<SearchIcon />} />
-          <BottomNavigationAction component={Link} to="/event/create" label="Add" icon={<AddIcon />} />
-          <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon />} />
-=======
           <BottomNavigationAction classes={{root: classes.root}} component={Link} to="/" label="Home" icon={<HomeIcon />} />
           <BottomNavigationAction classes={{root: classes.root}} component={Link} to="/discover" label="Discover" icon={<SearchIcon />}/>
-          <BottomNavigationAction classes={{root: classes.root}} component={Link} to="/attending" label="Going-to" icon={<FlightTakeoffIcon />} />
+          <BottomNavigationAction classes={{root: classes.root}} component={Link} to="/going_to" label="Going-to" icon={<FlightTakeoffIcon />} />
           <BottomNavigationAction classes={{root: classes.root}} component={Link} to="/event" label="Add" icon={<AddIcon />} />
           <BottomNavigationAction classes={{root: classes.root}} component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />}/>
->>>>>>> d2515b493196ff8b9fefa774d527fa21edfbb6fd
         </BottomNavigation>
       )
     }

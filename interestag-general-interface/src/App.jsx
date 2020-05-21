@@ -9,7 +9,6 @@ import { RegisterScreen } from './register/RegisterScreen';
 import { CreateEventScreen } from './event/CreateEventScreen';
 import { DiscoverEventScreen } from './event/DiscoverEventScreen';
 import { GoingToEventScreen } from './event/GoingToEventScreen';
-import { BottomNavBar } from './core/BottomNavBar';
 import AppTopBar from './core/AppTopBar';
 import { BottomNavBar } from './core/BottomNavBar';
 import { PrivateRoute } from './user-context/PrivateRoute'
@@ -39,7 +38,7 @@ function App() {
         <Route path="/discover" ><DiscoverEventScreen /></Route>
 
         <PrivateRoute authed={isAuthenticated()} path="/profile/:id"><Profile /></PrivateRoute>
-
+        <PrivateRoute authed={isAuthenticated()} path="/going_to"><GoingToEventScreen /></PrivateRoute>
         <EnforceAnonymousRoute authed={isAuthenticated()} path="/login"><LoginScreen /></EnforceAnonymousRoute>
         <EnforceAnonymousRoute authed={isAuthenticated()} path="/register"><RegisterScreen /></EnforceAnonymousRoute>
       </Switch>
