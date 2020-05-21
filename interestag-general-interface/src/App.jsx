@@ -15,11 +15,12 @@ import { PrivateRoute } from './user-context/PrivateRoute'
 import { UserContext } from './user-context/UserContextProvider';
 import { EnforceAnonymousRoute } from './user-context/EnforceAnonymousRoute';
 import { LoginForm } from './login/LoginForm';
+import { configAxios } from './utils/axiosConfig';
 
 function App() {
   const testName = 'Welcome to ProEp';
   const { currentUser, isAuthenticated } = useContext(UserContext);
-
+  
   const renderRoutes = () => {
     return (
       <Switch>

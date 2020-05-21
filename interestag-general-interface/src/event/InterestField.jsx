@@ -8,11 +8,11 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const COLOR_SET = ["#ff5722", "#03a9f4", "#ffc107", "#673ab7", "#009688", "#4caf50"]
 
-const InterestField = ({ index, name, color, valueChanged, deleteInterest, disabled }) => {
+const InterestField = ({ index, name, colour, valueChanged, deleteInterest, disabled }) => {
   const [colorPickerOpen, setOpen] = useState(false);
 
   const colorChanged = (value) => {
-    valueChanged(index, { color: value.hex });
+    valueChanged(index, { colour: value.hex });
     setOpen(false);
   }
 
@@ -38,7 +38,7 @@ const InterestField = ({ index, name, color, valueChanged, deleteInterest, disab
             style={{
               height: '20px',
               width: '20px',
-              backgroundColor: color ? color : '#ccc',
+              backgroundColor: colour ? colour : '#ccc',
               borderRadius: '50%',
               display: 'inline-block',
               cursor: disabled ? 'default' : 'pointer',
@@ -53,7 +53,7 @@ const InterestField = ({ index, name, color, valueChanged, deleteInterest, disab
       {colorPickerOpen &&
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '10px', padding: '5px 0', backgroundColor: '#f6f8fa'}}>
           <CirclePicker
-            color={`${color}`}
+            color={`${colour}`}
             onChange={colorChanged}
             colors={COLOR_SET}
           />

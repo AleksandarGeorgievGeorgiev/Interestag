@@ -7,7 +7,7 @@ import { UserContext } from './UserContextProvider';
 import { useRefreshToken } from './useRefreshToken';
 
 const useTokenInterceptor = () => {
-  const { currentUser, isAuthenticated } = useContext(UserContext);
+  const { currentUser, isJwtFresh } = useContext(UserContext);
   const handleRefreshToken = useRefreshToken();
   const navigationHistory = useHistory();
   let activeInterceptor = {};
@@ -22,7 +22,7 @@ const useTokenInterceptor = () => {
           return config;
       }
       
-      if (!isAuthenticated()) {
+      if (!isJwtFresh()) {
         return handleRefreshToken()
           .then((res) => config)
           .catch((err) => {
