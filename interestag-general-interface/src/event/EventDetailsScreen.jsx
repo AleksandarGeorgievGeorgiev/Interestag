@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 
 import axios from 'axios';
-import { useParams, useHistory } from 'react-router-dom';
-import { Box, Divider, Button, ButtonGroup } from '@material-ui/core';
+import { useParams, useHistory, Link } from 'react-router-dom';
+import { Box, Divider, Button, ButtonGroup, TextField } from '@material-ui/core';
 
 import { InterestField } from './InterestField';
 import { UserContext } from '../user-context/UserContextProvider';
+import { InviteAttendeeForm } from './InviteAttendeeForm';
 
 const ATTENDANCE_STATUS = {
   Pending: 1,
@@ -26,7 +27,7 @@ const EventDetailsScreen = () => {
       setEventData(eventFromHistory);
     } else {
       axios.get(`${process.env.REACT_APP_BASEURL}/api/event/${eventId}/`)
-        .then(async res => {
+        .then(res => {
           setEventData(res.data)
         });
     }
@@ -34,7 +35,7 @@ const EventDetailsScreen = () => {
 
   const setEventData = (eventData) => {
     Promise.all([
-      getCreatorData(eventData.creator), 
+      getCreatorData(eventData.creator),
       getAttendanceStatus(eventData.id)
     ]).then(([creator, attendance]) => {
       setCreator(creator);
@@ -43,12 +44,12 @@ const EventDetailsScreen = () => {
     });
   }
 
-  const getCreatorData = async (creatorId) => {
+  const getCreatorData = (creatorId) => {
     return axios.get(`${process.env.REACT_APP_BASEURL}/api/auth/profile/${creatorId}/`)
       .then(creatorRes => creatorRes.data);
   }
 
-  const getAttendanceStatus = async (eventId) => {
+  const getAttendanceStatus = (eventId) => {
     return axios.get(`${process.env.REACT_APP_BASEURL}/api/event/going_to`)
       .then(attendanceRes => {
         const eventFound = attendanceRes.data.find(e => e.id === eventId);
@@ -66,18 +67,40 @@ const EventDetailsScreen = () => {
       user: currentUser.userId,
       event: event.id,
       invitation_status: ATTENDANCE_STATUS.Accepted,
-    }).then(res => setAttendance(ATTENDANCE_STATUS.Accepted));
+    }).then(res => setAttendance(res.invitation_status));
   }
 
   const leaveEvent = () => {
     axios.patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${event.id}/`, {
       invitation_status: ATTENDANCE_STATUS.Rejected,
-    }).then(res => setAttendance(ATTENDANCE_STATUS.Rejected));
+    }).then(res => setAttendance(res.invitation_status));
+  }
+
+  const isOwnEvent = () => {
+    return event.creator === currentUser.userId;
   }
 
   return (
     <Box className="body" display="flex" flexDirection="column">
-      <h3>{event.name}</h3>
+      <Box display="flex" justifyContent="center">
+        <h3>{event.name}</h3>
+        {isOwnEvent() &&
+          <Button
+            style={{ marginLeft: 'auto' }}
+            size="small"
+            variant="contained"
+            color="primary"
+            component={Link}
+            to={{
+              pathname: `/event/${event.id}/edit/`,
+              state: event,
+            }}
+          >
+            Edit
+          </Button>
+        }
+      </Box>
+
       <Divider />
       <Box display="flex" justifyContent="space-around">
         {event.event_date && new Date(event.event_date).toDateString()}
@@ -110,6 +133,9 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
+      {isOwnEvent() &&
+        <InviteAttendeeForm style={{ marginTop: '15px' }} />
+      }
     </Box>
   );
 }

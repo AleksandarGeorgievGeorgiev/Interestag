@@ -1,10 +1,8 @@
 import React, { useState, useContext } from 'react'
-import { useHistory } from 'react-router-dom';
 
 import DateFnsUtils from '@date-io/date-fns';
 import Fab from '@material-ui/core/Fab';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import { UserContext } from '../user-context/UserContextProvider';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { TextField, FormControl } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';

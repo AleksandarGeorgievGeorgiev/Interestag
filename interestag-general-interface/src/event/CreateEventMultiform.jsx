@@ -42,7 +42,7 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
 
     axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
       'name': eventDetails.name,
-      'descritpion': eventDetails.descritpion,
+      'description': eventDetails.description,
       'event_date': parseDate(eventDetails.eventDate),
       'interest_selection_count': eventDetails.topInterests,
       'publicity': eventDetails.publicity

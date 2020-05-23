@@ -12,7 +12,6 @@ function DiscoverEventScreen() {
   const navigationHistory = useHistory();
 
   useEffect(() => {
-    console.log('discover');
     axios
       .get(`${process.env.REACT_APP_BASEURL}/api/event/discover/`)
       .then((res) => {
@@ -20,20 +19,23 @@ function DiscoverEventScreen() {
       });
   }, []);
 
-  const clickedEvent = (itemId) => {
-    navigationHistory.push(`/event/${itemId}/`);
+  const clickedEvent = (event) => {
+    navigationHistory.push({
+      pathname: `/event/${event.id}/`, 
+      state: { ...event }
+    });
   }
 
   return (
     <div className="body">
       <div>
-        {events.map((item) => (
-          <Card key={item.id}>
+        {events.map((event) => (
+          <Card key={event.id}>
             <div className="list-group-item">
               <Ripples>
-                <CardContent onClick={() => clickedEvent(item.id)}>
+                <CardContent onClick={() => clickedEvent(event)}>
                   <Typography>
-                    {item.name} | {new Date(item.event_date).toDateString()}
+                    {event.name} | {new Date(event.event_date).toDateString()}
                   </Typography>
                 </CardContent>
               </Ripples>

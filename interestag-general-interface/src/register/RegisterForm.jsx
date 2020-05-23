@@ -31,7 +31,7 @@ function RegisterForm() {
   }
 
   return (
-    <form>
+    <form autoComplete="off">
       <TextField
         id="standard-username-flexible"
         name="username"
@@ -39,6 +39,7 @@ function RegisterForm() {
         value={values.username}
         onChange={handleChange}
         type="text"
+        autoComplete="off"
       />
       <br />
       {errors.username && (
@@ -53,6 +54,7 @@ function RegisterForm() {
         value={values.email}
         onChange={handleChange}
         type="email"
+        autoComplete="off"
       />
       <br />
       {errors.email && (
@@ -67,6 +69,7 @@ function RegisterForm() {
         value={values.password}
         onChange={handleChange}
         type="password"
+        autoComplete="off"
       />
       <br />
       {errors.password && (
@@ -81,6 +84,7 @@ function RegisterForm() {
         value={values.password_confirm}
         onChange={handleChange}
         type="password"
+        autoComplete="off"
       />
       {errors.confirmPassword && (
         <Alert className="alert" severity="error">

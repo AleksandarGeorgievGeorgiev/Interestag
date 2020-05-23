@@ -15,6 +15,7 @@ import { PrivateRoute } from './user-context/PrivateRoute'
 import { UserContext } from './user-context/UserContextProvider';
 import { EnforceAnonymousRoute } from './user-context/EnforceAnonymousRoute';
 import { EventDetailsScreen } from './event/EventDetailsScreen';
+import { EditEventForm } from './event/EditEventForm';
 
 import { useTokenInterceptor } from './user-context/useTokenInterceptor';
 
@@ -32,6 +33,7 @@ function App() {
     return (
       <Switch>
         <PrivateRoute authed={isAuthenticated()} exact path="/event/create"><CreateEventScreen /></PrivateRoute>
+        <PrivateRoute authed={isAuthenticated()} exact path="/event/:id/edit"><EditEventForm /></PrivateRoute>
         <Route path="/event/:id"><EventDetailsScreen /></Route>
 
         <Route exact path="/" component={Home}/>
