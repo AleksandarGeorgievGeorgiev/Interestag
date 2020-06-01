@@ -181,3 +181,9 @@ color: #C7ABBA;
 .going-to-items{
   background-color: #c6ece3;
 }
+.pending-items{
+  background-color: #0b745b;
+}
+.MuiSvgIcon-root.pending-icon{
+  color: rgb(255, 174, 0);
+}

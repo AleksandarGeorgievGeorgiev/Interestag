@@ -185,7 +185,7 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
-      {isOwnEvent() && <InviteAttendeeForm style={{ marginTop: "15px" }} />}
+      {isOwnEvent() && <InviteAttendeeForm attendance={ATTENDANCE_STATUS.Pending} eventId={event.id} style={{ marginTop: "15px" }} />}
     </Box>
   );
 };
