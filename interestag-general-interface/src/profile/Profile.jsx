@@ -21,7 +21,7 @@ const Profile = () => {
       .then((res) => {
         setOwnEvents(res.data);
       });
-  });
+  }, []);
 
   const clickedEvent = (event) => {
     navigationHistory.push({

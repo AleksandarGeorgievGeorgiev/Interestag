@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+import { UserContext } from '../user-context/UserContextProvider';
 
 import axios from 'axios';
 
@@ -10,6 +12,8 @@ import { CreateEventDetailsForm } from './CreateEventDetailsForm';
 const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
   const [interests, setInterests] = useState([{ name: '', colour: '' }]);
   const createEventFormHandler = useFormHandler();
+  const {currentUser} = useContext(UserContext);
+  const history = useHistory();
 
   const addInterest = () => {
     const tempInterests = interests.slice();
@@ -39,7 +43,8 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
 
   const createEvent = () => {
     const eventDetails = createEventFormHandler.values;
-
+    console.log(currentUser);
+    console.log(createEventFormHandler);
     axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
       'name': eventDetails.name,
       'description': eventDetails.description,
@@ -58,7 +63,10 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
         }
       ))
     )
-    .then(res => console.log(res)) //TODO: Navigate to created event
+    .then(res => console.log(res), history.push({
+      pathname: `/profile/${currentUser.userId}`,
+      state: eventDetails
+    })) //TODO: Navigate to created event
     .catch(err => console.log(err)); //TODO: Display error message
   }
 

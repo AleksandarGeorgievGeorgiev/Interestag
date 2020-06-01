@@ -25,6 +25,7 @@ function App() {
   const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
   attachInterceptor();
 
+  
   useEffect(() => {
     return () => detachInterceptor();
   }, []);

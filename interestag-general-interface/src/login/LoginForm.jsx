@@ -91,6 +91,7 @@ function LoginForm() {
         size="small"
         textButton="Continue with Facebook"
         icon="fab fa-facebook-f"
+        version="3.1"
       />
     </form>
   );

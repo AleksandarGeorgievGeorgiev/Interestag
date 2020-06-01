@@ -13,7 +13,7 @@ const GoingToEventScreen = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_BASEURL}/api/event/going_to/`)
+      .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to/`)
       .then((res) => {
         setEvents(res.data);
       });
@@ -35,7 +35,7 @@ const GoingToEventScreen = () => {
               <Ripples>
                 <CardContent onClick={() => clickedEvent(event)}>
                   <Typography>
-                    {event.name} | {new Date(event.event_date).toDateString()}
+                    {event.event.name} | {new Date(event.event.event_date).toDateString()}
                   </Typography>
                 </CardContent>
               </Ripples>
