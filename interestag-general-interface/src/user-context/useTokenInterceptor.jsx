@@ -13,34 +13,30 @@ const useTokenInterceptor = () => {
   let activeInterceptor = {};
 
   const attachInterceptor = () => {
-    if (!!activeInterceptor || activeInterceptor === 0) {
-      axios.interceptors.request.eject(activeInterceptor);
-    }
-
     activeInterceptor = axios.interceptors.request.use(
       (config) => {
         if (!config.withCredentials) {
           config.withCredentials = true;
         }
 
-        if (
-          config.url.includes("/auth/login/") ||
-          config.url.includes("/auth/register/") ||
-          config.url.includes("/auth/token/refresh-jwt/") ||
-          config.url.includes("/api/auth/facebook-auth/")
-        ) {
-          return config;
-        }
+        // if (
+        //   config.url.includes("/auth/login/") ||
+        //   config.url.includes("/auth/register/") ||
+        //   config.url.includes("/auth/token/refresh-jwt/") ||
+        //   config.url.includes("/api/auth/facebook-auth/")
+        // ) {
+        //   return config;
+        // }
         
-        if (!isJwtFresh()) {
-          return handleRefreshToken()
-            .then((res) => config)
-            .catch((err) => {
-              navigationHistory.push("/login/");
+        // if (!isJwtFresh()) {
+        //   return handleRefreshToken()
+        //     .then((res) => config)
+        //     .catch((err) => {
+        //       navigationHistory.push("/login/");
 
-              return Promise.reject(err);
-            });
-        }
+        //       return Promise.reject(err);
+        //     });
+        // }
 
         return config;
       },

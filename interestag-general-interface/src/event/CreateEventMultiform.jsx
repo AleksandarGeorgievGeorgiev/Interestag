@@ -8,12 +8,14 @@ import { CreateInterestsForm } from './CreateInterestsForm';
 import { useFormHandler } from '../register/useFormHandler';
 import { CreateEventOverview } from './CreateEventOverview';
 import { CreateEventDetailsForm } from './CreateEventDetailsForm';
+import { useProtectedApi } from '../core/useProtectedApi';
 
 const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
   const [interests, setInterests] = useState([{ name: '', colour: '' }]);
   const createEventFormHandler = useFormHandler();
   const {currentUser} = useContext(UserContext);
   const history = useHistory();
+  const protectedApi = useProtectedApi();
 
   const addInterest = () => {
     const tempInterests = interests.slice();
@@ -43,9 +45,8 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
 
   const createEvent = () => {
     const eventDetails = createEventFormHandler.values;
-    console.log(currentUser);
-    console.log(createEventFormHandler);
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
+
+    protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
       'name': eventDetails.name,
       'description': eventDetails.description,
       'event_date': parseDate(eventDetails.eventDate),
@@ -53,7 +54,7 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
       'publicity': eventDetails.publicity
     })
     .then(res =>
-      axios.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
+      protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
         interests.map(interest => { 
           return { 
             event: res.data.id,
@@ -63,10 +64,10 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
         }
       ))
     )
-    .then(res => console.log(res), history.push({
+    .then(res => history.push({
       pathname: `/profile/${currentUser.userId}`,
       state: eventDetails
-    })) //TODO: Navigate to created event
+    }))
     .catch(err => console.log(err)); //TODO: Display error message
   }
 

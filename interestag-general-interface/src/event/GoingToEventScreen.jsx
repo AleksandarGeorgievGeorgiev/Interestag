@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from "react";
 
-import axios from "axios";
 import { useHistory } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
@@ -9,12 +8,15 @@ import Ripples from "react-ripples";
 import Divider from '@material-ui/core/Divider';
 import WarningIcon from '@material-ui/icons/Warning';
 
+import { useProtectedApi } from '../core/useProtectedApi';
+
 const GoingToEventScreen = () => {
   const [events, setEvents] = useState([]);
   const navigationHistory = useHistory();
+  const protectedApi = useProtectedApi();
   
   useEffect(() => {
-    axios
+    protectedApi
     .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to/`)
     .then((res) => {
       setEvents(res.data);

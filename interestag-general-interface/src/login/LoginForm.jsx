@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import FacebookLogin from 'react-facebook-login';
 
 import { UserContext } from '../user-context/UserContextProvider';
+import { useProtectedApi } from '../core/useProtectedApi';
 
 const styles = {
   button: {
@@ -25,6 +26,7 @@ function LoginForm() {
   const [userCredentials, setUserCredentials] = useState();
   const { authenticateUser } = useContext(UserContext);
   const navigationHistory = useHistory();
+  const protectedApi = useProtectedApi();
 
   const handleInputChange = (event) => {
     event.persist();
@@ -37,7 +39,7 @@ function LoginForm() {
   };
 
   const handleLoginSubmit = () => {
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials)
+    protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials, { withCredentials: true })
       .then((res) => { authenticateUser(res); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   };
@@ -47,14 +49,10 @@ function LoginForm() {
       userId: response.userID,
       accessToken: response.accessToken
     }
-    console.log(body)
-    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/facebook-auth/`, body, {withCredentials: true})
+    
+    protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/auth/facebook-auth/`, body, {withCredentials: true})
       .then((res) => { authenticateUser(userCredentials); navigationHistory.push('/') })
       .catch((err) => console.log(err));
-  }
-
-  const componentClicked = () => {
-    console.log("clicked")
   }
 
   return (
@@ -87,7 +85,6 @@ function LoginForm() {
         autoLoad = {false}
         fields="name,email,picture"
         callback={responseFacebook}
-        onClick={componentClicked}
         size="small"
         textButton="Continue with Facebook"
         icon="fab fa-facebook-f"

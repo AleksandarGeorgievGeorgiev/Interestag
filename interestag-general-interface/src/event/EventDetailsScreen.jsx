@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import axios from "axios";
 import { useParams, useHistory, Link } from "react-router-dom";
 import {
   Box,
@@ -17,6 +16,8 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import  { Redirect } from 'react-router-dom'
 
+import { useProtectedApi } from '../core/useProtectedApi';
+
 const ATTENDANCE_STATUS = {
   Pending: 1,
   Accepted: 2,
@@ -31,12 +32,13 @@ const EventDetailsScreen = () => {
   const [attendance, setAttendance] = useState(0);
   const { state: eventFromHistory } = history.location;
   const { id: eventId } = useParams();
+  const protectedApi = useProtectedApi();
 
   useEffect(() => {
     if (eventFromHistory) {
       setEventData(eventFromHistory);
     } else {
-      axios
+      protectedApi
         .get(`${process.env.REACT_APP_BASEURL}/api/event/${eventId}/`)
         .then((res) => {
           setEventData(res.data);
@@ -56,13 +58,13 @@ const EventDetailsScreen = () => {
   };
 
   const getCreatorData = (creatorId) => {
-    return axios
+    return protectedApi
       .get(`${process.env.REACT_APP_BASEURL}/api/auth/profile/${creatorId}/`)
       .then((creatorRes) => creatorRes.data);
   };
 
   const getAttendanceStatus = (eventId) => {
-    return axios
+    return protectedApi
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
       .then((attendanceRes) => {
         const eventFound = attendanceRes.data.find((e) => e.id === eventId);
@@ -76,7 +78,7 @@ const EventDetailsScreen = () => {
   };
 
   const joinEvent = () => {
-    axios
+    protectedApi
       .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
         user: currentUser.userId,
         event: event.id,
@@ -86,7 +88,7 @@ const EventDetailsScreen = () => {
   };
 
   const leaveEvent = () => {
-    axios
+    protectedApi
       .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${event.id}/`, {
         invitation_status: ATTENDANCE_STATUS.Rejected,
       })
@@ -94,7 +96,7 @@ const EventDetailsScreen = () => {
   };
   
   const deleteOnClick = (eventId) => {
-    axios
+    protectedApi
       .delete(`${process.env.REACT_APP_BASEURL}/api/event/${event.id}/`,{
       })
       .then(history.push({

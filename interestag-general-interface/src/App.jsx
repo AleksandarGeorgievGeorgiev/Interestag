@@ -22,13 +22,6 @@ import { useTokenInterceptor } from './user-context/useTokenInterceptor';
 function App() {
   const testName = 'Welcome to ProEp';
   const { isAuthenticated } = useContext(UserContext);
-  const { attachInterceptor, detachInterceptor } = useTokenInterceptor();
-  attachInterceptor();
-
-  
-  useEffect(() => {
-    return () => detachInterceptor();
-  }, []);
   
   const renderRoutes = () => {
     return (

@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
 import { useHistory } from 'react-router-dom';
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Ripples from "react-ripples";
 
+import { useProtectedApi } from '../core/useProtectedApi';
+
 function DiscoverEventScreen() {
   const [events, setEvents] = useState([]);
   const navigationHistory = useHistory();
+  const protectedApi = useProtectedApi(); 
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_BASEURL}/api/event/discover/`)
+    protectedApi
+      .get(`/api/event/discover/`)
       .then((res) => {
         setEvents(res.data);
       });

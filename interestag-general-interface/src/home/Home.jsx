@@ -6,15 +6,17 @@ import { Button } from '@material-ui/core';
 import { UserContext } from '../user-context/UserContextProvider';
 import { Header } from '../core/Header';
 
+import { useProtectedApi } from '../core/useProtectedApi';
+
 const Home = () => {
   const { currentUser } = useContext(UserContext);
   const [hello, setHello] = useState('Waiting For Message...');
+  const protectedApi = useProtectedApi();
+
   const testApi = () => {
-    axios.get(`${process.env.REACT_APP_BASEURL}/api/test`)
+    protectedApi.get(`${process.env.REACT_APP_BASEURL}/api/test`)
       .then((res) => setHello(res.data))
       .catch((err) => console.log(err));
-
-    console.log(document.cookie);
   };
 
   return (

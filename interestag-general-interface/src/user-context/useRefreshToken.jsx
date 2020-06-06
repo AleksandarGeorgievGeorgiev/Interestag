@@ -4,16 +4,16 @@ import axios from 'axios';
 import { UserContext } from './UserContextProvider';
 
 const useRefreshToken = () => {
-  const { authenticateUser } = useContext(UserContext);
+  const { authenticateUser, deauthenticateUser } = useContext(UserContext);
 
-  const handleRefreshToken = () => {
+  const refreshToken = async () => {
     return axios
-      .post(`${process.env.REACT_APP_BASEURL}/api/auth/token/refresh-jwt/`, {})
+      .post(`${process.env.REACT_APP_BASEURL}/api/auth/token/refresh-jwt/`, {}, { withCredentials: true })
       .then((res) => authenticateUser(res))
-      .catch((err) => Promise.reject(err));
+      .catch((err) => deauthenticateUser());
   }
 
-  return handleRefreshToken;
+  return refreshToken;
 };
 
 export { useRefreshToken }

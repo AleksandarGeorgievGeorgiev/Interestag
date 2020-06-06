@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
 
-import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 
 import DateFnsUtils from '@date-io/date-fns';
@@ -15,6 +14,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 
 import { InterestField } from './InterestField';
+import { useProtectedApi } from '../core/useProtectedApi';
 
 const INTEREST_STATUS = {
   Created: 0,
@@ -33,6 +33,7 @@ function EditEventForm() {
     publicity: '',
   });
   const [interests, setInterests] = useState([]);
+  const protectedApi = useProtectedApi();
 
   useEffect(() => {
     if (eventFromHistory) {
@@ -48,7 +49,7 @@ function EditEventForm() {
       setEventDetails(eventData);
     }
     else {
-      axios
+      protectedApi
         .get(`${process.env.REACT_APP_BASEURL}/api/event/${eventId}`)
         .then(res => {
           const eventData = {
@@ -65,10 +66,6 @@ function EditEventForm() {
         });
     }
   }, []);
-
-  useEffect(() => {
-    console.log(eventDetails);
-  }, [eventDetails])
 
   const handleEventChange = (event) => {
     event.persist();
@@ -109,7 +106,7 @@ function EditEventForm() {
   }
 
   const updateEvent = () => {
-    return axios.put(`${process.env.REACT_APP_BASEURL}/api/event/${eventId}/`, {
+    return protectedApi.put(`${process.env.REACT_APP_BASEURL}/api/event/${eventId}/`, {
       'name': eventDetails.name,
       'description': eventDetails.description,
       'event_date': parseDate(eventDetails.event_date),
@@ -123,7 +120,7 @@ function EditEventForm() {
     const promises = [];
 
     deletedInterests.forEach(interest => {
-      const promise = axios.delete(`${process.env.REACT_APP_BASEURL}/api/interest/${interest.id}/`);
+      const promise = protectedApi.delete(`${process.env.REACT_APP_BASEURL}/api/interest/${interest.id}/`);
 
       promises.push(promise);
     });
@@ -134,7 +131,7 @@ function EditEventForm() {
   const createInterests = () => {
     const createdInterests = interests.filter(interest => interest.status === INTEREST_STATUS.Created);
 
-    return axios.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`,
+    return protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`,
       createdInterests.map(interest => {
         return {
           event: eventId,

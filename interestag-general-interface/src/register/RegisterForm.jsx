@@ -11,6 +11,7 @@ import { useFormHandler } from './useFormHandler';
 import validate from './validateRegister';
 import { UserContext } from '../user-context/UserContextProvider';
 import { TextField } from '@material-ui/core';
+import { useProtectedApi } from '../core/useProtectedApi';
 
 function RegisterForm() {
   const {
@@ -21,10 +22,10 @@ function RegisterForm() {
   );
   const { authenticateUser } = useContext(UserContext);
   const navigationHistory = useHistory();
+  const protectedApi = useProtectedApi();
 
   function submit() {
-    console.log(values)
-    axios
+    protectedApi
       .post(`${process.env.REACT_APP_BASEURL}/api/auth/register/`, values)
       .then((res) => { authenticateUser(values); navigationHistory.push('/') })
       .catch((err) => console.log(err));
