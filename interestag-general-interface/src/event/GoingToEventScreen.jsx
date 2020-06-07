@@ -29,12 +29,13 @@ const GoingToEventScreen = () => {
       pathname: `/event/${event.id}/`, 
       state: { ...event }
     });
+    console.log(events.sort(function(a,b){return a.invitation_status- b.invitation_status}))
   };
 
   return (
     <div className="body">
       <div>
-      {events.map((event, index) => (
+      {events.sort(function(a,b){return a.invitation_status- b.invitation_status}).map((event, index) => (
         event.invitation_status === 1 ? 
         <Card key={event.id} style={{ marginTop: "10px" }}>
             <div className="pending-items">
