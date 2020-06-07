@@ -13,7 +13,7 @@ import { useProtectedApi } from '../core/useProtectedApi';
 const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
   const [interests, setInterests] = useState([{ name: '', colour: '' }]);
   const createEventFormHandler = useFormHandler();
-  const {currentUser} = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const history = useHistory();
   const protectedApi = useProtectedApi();
 
@@ -53,8 +53,8 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
       'interest_selection_count': eventDetails.topInterests,
       'publicity': eventDetails.publicity
     })
-    .then(res =>
-      protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
+    .then(res => {
+      const createInterests = protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
         interests.map(interest => { 
           return { 
             event: res.data.id,
@@ -62,8 +62,16 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
             colour: interest.colour,
           }
         }
-      ))
-    )
+      ));
+
+      const attendMyEvent = protectedApi.post('/api/attendance/', {
+        user: currentUser.userId,
+        event: res.data.id,
+        invitation_status: 2,
+      });
+
+      return Promise.all([createInterests, attendMyEvent]);
+    })
     .then(res => history.push({
       pathname: `/profile/${currentUser.userId}`,
       state: eventDetails

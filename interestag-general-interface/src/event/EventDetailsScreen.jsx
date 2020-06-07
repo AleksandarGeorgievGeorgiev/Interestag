@@ -27,7 +27,7 @@ const ATTENDANCE_STATUS = {
 const EventDetailsScreen = () => {
   const  history  = useHistory();
   const { currentUser } = useContext(UserContext);
-  const [event, setEvent] = useState({});
+  const [currentEvent, setCurrentEvent] = useState({});
   const [creator, setCreator] = useState({});
   const [attendance, setAttendance] = useState(0);
   const { state: eventFromHistory } = history.location;
@@ -53,7 +53,7 @@ const EventDetailsScreen = () => {
     ]).then(([creator, attendance]) => {
       setCreator(creator);
       setAttendance(attendance);
-      setEvent(eventData);
+      setCurrentEvent(eventData);
     });
   };
 
@@ -67,7 +67,7 @@ const EventDetailsScreen = () => {
     return protectedApi
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
       .then((attendanceRes) => {
-        const eventFound = attendanceRes.data.find((e) => e.id === eventId);
+        const eventFound = attendanceRes.data.find(({ event: e }) => e.id === eventId);
 
         if (eventFound) {
           return ATTENDANCE_STATUS.Accepted;
@@ -81,7 +81,7 @@ const EventDetailsScreen = () => {
     protectedApi
       .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
         user: currentUser.userId,
-        event: event.id,
+        event: currentEvent.id,
         invitation_status: ATTENDANCE_STATUS.Accepted,
       })
       .then((res) => setAttendance(res.invitation_status));
@@ -89,7 +89,7 @@ const EventDetailsScreen = () => {
 
   const leaveEvent = () => {
     protectedApi
-      .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${event.id}/`, {
+      .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.id}/`, {
         invitation_status: ATTENDANCE_STATUS.Rejected,
       })
       .then((res) => setAttendance(res.invitation_status));
@@ -97,7 +97,7 @@ const EventDetailsScreen = () => {
   
   const deleteOnClick = (eventId) => {
     protectedApi
-      .delete(`${process.env.REACT_APP_BASEURL}/api/event/${event.id}/`,{
+      .delete(`${process.env.REACT_APP_BASEURL}/api/event/${currentEvent.id}/`,{
       })
       .then(history.push({
         pathname: `/profile/${creator}`
@@ -105,13 +105,13 @@ const EventDetailsScreen = () => {
   }
 
   const isOwnEvent = () => {
-    return event.creator === currentUser.userId;
+    return currentEvent.creator === currentUser.userId;
   };
 
   return (
     <Box className="body" display="flex" flexDirection="column">
       <Box display="flex" justifyContent="center">
-        <h3>{event.name}</h3>
+        <h3>{currentEvent.name}</h3>
         {isOwnEvent() && (
           <ButtonGroup style={{ marginLeft: "auto" }}>
             <Button
@@ -120,8 +120,8 @@ const EventDetailsScreen = () => {
               color="primary"
               component={Link}
               to={{
-                pathname: `/event/${event.id}/edit/`,
-                state: event,
+                pathname: `/event/${currentEvent.id}/edit/`,
+                state: currentEvent,
               }}
             >
               Edit
@@ -130,9 +130,7 @@ const EventDetailsScreen = () => {
               size="small"
               variant="contained"
               color="primary"
-              component={Link}
-              onClick={() => deleteOnClick(event.id)}
-              
+              onClick={() => deleteOnClick(currentEvent.id)}              
             >
               Delete 
             </Button>
@@ -142,18 +140,19 @@ const EventDetailsScreen = () => {
 
       <Divider />
       <Box display="flex" justifyContent="space-around">
-        {event.event_date && new Date(event.event_date).toDateString()}
+        {currentEvent.event_date && new Date(currentEvent.event_date).toDateString()}
         <span>{creator.username}</span>
       </Box>
-      <p>{event.description}</p>
+      <p>{currentEvent.description}</p>
       <h3>Interests</h3>
       <Divider />
-      {event.interest_set &&
-        event.interest_set.map((interest, index) => (
-          <Card key={event.id}>
+      {currentEvent.interest_set &&
+        currentEvent.interest_set.map((interest, index) => (
+          <Card key={index}>
             <div className="going-to-items">
+                {index}
                 <CardContent>
-                  <InterestField key={index} {...interest} disabled={true} />
+                  <InterestField {...interest} disabled={true} />
                 </CardContent>
             </div>
           </Card>
@@ -187,7 +186,7 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
-      {isOwnEvent() && <InviteAttendeeForm attendance={ATTENDANCE_STATUS.Pending} eventId={event.id} style={{ marginTop: "15px" }} />}
+      {isOwnEvent() && <InviteAttendeeForm attendance={ATTENDANCE_STATUS.Pending} eventId={currentEvent.id} style={{ marginTop: "15px" }} />}
     </Box>
   );
 };

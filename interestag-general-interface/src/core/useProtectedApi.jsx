@@ -22,7 +22,7 @@ const useProtectedApi = () => {
   const authorizeRequest = async () => {
     if (!isJwtFresh()) {
       return refreshToken()
-        .then((res) => Promise.resolve(res))
+        .then((res) => { return Promise.resolve(res); })
         .catch((err) => {
           navigationHistory.push("/login/");
 
