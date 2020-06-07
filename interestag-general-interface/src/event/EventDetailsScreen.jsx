@@ -29,7 +29,7 @@ const EventDetailsScreen = () => {
   const { currentUser } = useContext(UserContext);
   const [currentEvent, setCurrentEvent] = useState({});
   const [creator, setCreator] = useState({});
-  const [attendance, setAttendance] = useState(0);
+  const [attendanceStatus, setAttendanceStatus] = useState(0);
   const { state: eventFromHistory } = history.location;
   const { id: eventId } = useParams();
   const protectedApi = useProtectedApi();
@@ -52,8 +52,15 @@ const EventDetailsScreen = () => {
       getAttendanceStatus(eventData.id),
     ]).then(([creator, attendance]) => {
       setCreator(creator);
-      setAttendance(attendance);
-      setCurrentEvent(eventData);
+      setAttendanceStatus(attendance.invitation_status || ATTENDANCE_STATUS.Rejected);
+      setCurrentEvent({ 
+        ...eventData,
+        attendance: {
+          id: attendance.id,
+          user: attendance.user,
+          userInterests: attendance.eventatendeeintereset_set,
+        }
+      });
     });
   };
 
@@ -67,13 +74,13 @@ const EventDetailsScreen = () => {
     return protectedApi
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
       .then((attendanceRes) => {
-        const eventFound = attendanceRes.data.find(({ event: e }) => e.id === eventId);
+        const attendanceFound = attendanceRes.data.find(({ event: e }) => e.id === eventId);
 
-        if (eventFound) {
-          return ATTENDANCE_STATUS.Accepted;
-        } else {
-          return ATTENDANCE_STATUS.Rejected;
+        if (attendanceFound) {
+          return attendanceFound;
         }
+
+        return {};
       });
   };
 
@@ -84,22 +91,32 @@ const EventDetailsScreen = () => {
         event: currentEvent.id,
         invitation_status: ATTENDANCE_STATUS.Accepted,
       })
-      .then((res) => setAttendance(res.invitation_status));
+      .then((res) => {
+        const eventAttendance = {
+          id: res.data.id,
+          user: res.data.user,
+        }
+
+        setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
+        setAttendanceStatus(res.data.invitation_status);
+
+        //TODO: Rate event interests
+      });
   };
 
   const leaveEvent = () => {
     protectedApi
-      .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.id}/`, {
+      .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`, {
         invitation_status: ATTENDANCE_STATUS.Rejected,
       })
-      .then((res) => setAttendance(res.invitation_status));
+      .then((res) => setAttendanceStatus(res.data.invitation_status));
   };
   
   const deleteOnClick = (eventId) => {
     protectedApi
       .delete(`${process.env.REACT_APP_BASEURL}/api/event/${currentEvent.id}/`,{
       })
-      .then(history.push({
+      .then(res => history.push({
         pathname: `/profile/${creator}`
       }));
   }
@@ -163,7 +180,7 @@ const EventDetailsScreen = () => {
           <Button
             onClick={joinEvent}
             variant={
-              ATTENDANCE_STATUS.Accepted === attendance
+              ATTENDANCE_STATUS.Accepted === attendanceStatus
                 ? "contained"
                 : "outlined"
             }
@@ -175,7 +192,7 @@ const EventDetailsScreen = () => {
           <Button
             onClick={leaveEvent}
             variant={
-              ATTENDANCE_STATUS.Rejected === attendance
+              ATTENDANCE_STATUS.Rejected === attendanceStatus
                 ? "contained"
                 : "outlined"
             }

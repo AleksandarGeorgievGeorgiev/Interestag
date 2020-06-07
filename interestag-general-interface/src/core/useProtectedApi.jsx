@@ -44,7 +44,7 @@ const useProtectedApi = () => {
           case 'POST': return axios.post(endpoint, data, optionsWithCredentials);
           case 'PUT': return axios.put(endpoint, data, optionsWithCredentials);
           case 'PATCH': return axios.patch(endpoint, data, optionsWithCredentials);
-          case 'DELETE': return axios.delete(endpoint, data, optionsWithCredentials);
+          case 'DELETE': return axios.delete(endpoint, optionsWithCredentials);
           case 'OPTIONS': return axios.options(endpoint, optionsWithCredentials);
           case 'HEAD': return axios.head(endpoint, optionsWithCredentials);
         }
