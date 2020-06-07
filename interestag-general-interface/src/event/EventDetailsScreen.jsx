@@ -167,7 +167,6 @@ const EventDetailsScreen = () => {
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
             <div className="going-to-items">
-                {index}
                 <CardContent>
                   <InterestField {...interest} disabled={true} />
                 </CardContent>

@@ -45,7 +45,7 @@ const Profile = () => {
     <div>
       <div> 
       <img className="profilepic" src="../Images/me.jpg"/>
-      </div>-=
+      </div>
     <div className="name"> Alekssandra Belcheva </div>
     <div className="username"> username: {currentUser.username} </div>
       {/* взимаш array-я и му "мапваш" пропъртитата на обекта */}

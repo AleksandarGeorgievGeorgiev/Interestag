@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 
 import { UserContext } from "../user-context/UserContextProvider";
 import { useRefreshToken } from "../user-context/useRefreshToken";
@@ -9,7 +8,6 @@ import { useRefreshToken } from "../user-context/useRefreshToken";
 const useProtectedApi = () => {
   const { isJwtFresh } = useContext(UserContext);
   const refreshToken = useRefreshToken();
-  const navigationHistory = useHistory();
 
   const normalizeUrl = (url) => {
     if(!url.startsWith('http')) {
@@ -24,8 +22,6 @@ const useProtectedApi = () => {
       return refreshToken()
         .then((res) => { return Promise.resolve(res); })
         .catch((err) => {
-          navigationHistory.push("/login/");
-
           return Promise.reject(err);
         });
     }

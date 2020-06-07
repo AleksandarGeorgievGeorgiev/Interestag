@@ -39,7 +39,7 @@ function LoginForm() {
   };
 
   const handleLoginSubmit = () => {
-    protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/login/`, userCredentials, { withCredentials: true })
       .then((res) => { authenticateUser(res); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   };
@@ -50,7 +50,7 @@ function LoginForm() {
       accessToken: response.accessToken
     }
     
-    protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/auth/facebook-auth/`, body, {withCredentials: true})
+    axios.post(`${process.env.REACT_APP_BASEURL}/api/auth/facebook-auth/`, body, {withCredentials: true})
       .then((res) => { authenticateUser(userCredentials); navigationHistory.push('/') })
       .catch((err) => console.log(err));
   }
