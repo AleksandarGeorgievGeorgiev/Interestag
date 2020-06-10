@@ -1,21 +1,18 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
-
+import React, {useState, useEffect} from 'react';
+import { useProtectedApi } from '../core/useProtectedApi';
 import { TextField, Button } from '@material-ui/core';
 
 import { useFormHandler } from '../register/useFormHandler';
 const InviteAttendeeForm = (userdata) => {
   const { handleChange, values } = useFormHandler();
+  const protectedApi = useProtectedApi();
   
   const sendInvite = () => {
-    console.log(userdata.attendance)
-    console.log(userdata.eventId)
-    console.log(values.attendee)
-    axios
+    protectedApi
     .post(`${process.env.REACT_APP_BASEURL}/api/auth/find-user/`, {
       username: values.attendee,
     }).then(res => 
-      axios
+      protectedApi
       .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
         user: res.data.id,
         event: userdata.eventId,

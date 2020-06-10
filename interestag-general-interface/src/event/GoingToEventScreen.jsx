@@ -27,7 +27,7 @@ const GoingToEventScreen = () => {
   const clickedEvent = (event) => {
     navigationHistory.push({
       pathname: `/event/${event.id}/`, 
-      state: { ...event }
+      state: { ...event.event }
     });
     console.log(events.sort(function(a,b){return a.invitation_status- b.invitation_status}))
   };

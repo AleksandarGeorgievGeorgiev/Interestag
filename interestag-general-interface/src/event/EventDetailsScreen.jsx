@@ -14,9 +14,10 @@ import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import  { Redirect } from 'react-router-dom'
+// import Rating from "@material-ui/lab/Rating";
+import { Redirect } from "react-router-dom";
 
-import { useProtectedApi } from '../core/useProtectedApi';
+import { useProtectedApi } from "../core/useProtectedApi";
 
 const ATTENDANCE_STATUS = {
   Pending: 1,
@@ -25,7 +26,7 @@ const ATTENDANCE_STATUS = {
 };
 
 const EventDetailsScreen = () => {
-  const  history  = useHistory();
+  const history = useHistory();
   const { currentUser } = useContext(UserContext);
   const [currentEvent, setCurrentEvent] = useState({});
   const [creator, setCreator] = useState({});
@@ -33,7 +34,8 @@ const EventDetailsScreen = () => {
   const { state: eventFromHistory } = history.location;
   const { id: eventId } = useParams();
   const protectedApi = useProtectedApi();
-
+  const [rating, setRating] = useState({});
+        
   useEffect(() => {
     if (eventFromHistory) {
       setEventData(eventFromHistory);
@@ -52,14 +54,16 @@ const EventDetailsScreen = () => {
       getAttendanceStatus(eventData.id),
     ]).then(([creator, attendance]) => {
       setCreator(creator);
-      setAttendanceStatus(attendance.invitation_status || ATTENDANCE_STATUS.Rejected);
-      setCurrentEvent({ 
+      setAttendanceStatus(
+        attendance.invitation_status || ATTENDANCE_STATUS.Rejected
+      );
+      setCurrentEvent({
         ...eventData,
         attendance: {
           id: attendance.id,
           user: attendance.user,
           userInterests: attendance.eventatendeeintereset_set,
-        }
+        },
       });
     });
   };
@@ -74,7 +78,9 @@ const EventDetailsScreen = () => {
     return protectedApi
       .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
       .then((attendanceRes) => {
-        const attendanceFound = attendanceRes.data.find(({ event: e }) => e.id === eventId);
+        const attendanceFound = attendanceRes.data.find(
+          ({ event: e }) => e.id === eventId
+        );
 
         if (attendanceFound) {
           return attendanceFound;
@@ -85,41 +91,59 @@ const EventDetailsScreen = () => {
   };
 
   const joinEvent = () => {
-    protectedApi
-      .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
-        user: currentUser.userId,
-        event: currentEvent.id,
-        invitation_status: ATTENDANCE_STATUS.Accepted,
-      })
-      .then((res) => {
-        const eventAttendance = {
-          id: res.data.id,
-          user: res.data.user,
+    if(attendanceStatus == ATTENDANCE_STATUS.Pending){
+      protectedApi
+      .patch(
+        `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
+        {
+          invitation_status: ATTENDANCE_STATUS.Accepted,
         }
-
-        setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
-        setAttendanceStatus(res.data.invitation_status);
-
-        //TODO: Rate event interests
-      });
+      )
+      .then((res) => setAttendanceStatus(res.data.invitation_status));
+    }
+    else{
+      protectedApi
+        .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
+          user: currentUser.userId,
+          event: currentEvent.id,
+          invitation_status: ATTENDANCE_STATUS.Accepted,
+        })
+        .then((res) => {
+          const eventAttendance = {
+            id: res.data.id,
+            user: res.data.user,
+          };
+          setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
+          setAttendanceStatus(res.data.invitation_status);
+    
+          //TODO: Rate event interests
+        });
+      } 
   };
 
   const leaveEvent = () => {
     protectedApi
-      .patch(`${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`, {
-        invitation_status: ATTENDANCE_STATUS.Rejected,
-      })
+      .patch(
+        `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
+        {
+          invitation_status: ATTENDANCE_STATUS.Rejected,
+        }
+      )
       .then((res) => setAttendanceStatus(res.data.invitation_status));
   };
-  
+
   const deleteOnClick = (eventId) => {
     protectedApi
-      .delete(`${process.env.REACT_APP_BASEURL}/api/event/${currentEvent.id}/`,{
-      })
-      .then(res => history.push({
-        pathname: `/profile/${creator}`
-      }));
-  }
+      .delete(
+        `${process.env.REACT_APP_BASEURL}/api/event/${currentEvent.id}/`,
+        {}
+      )
+      .then((res) =>
+        history.push({
+          pathname: `/profile/${creator}`,
+        })
+      );
+  };
 
   const isOwnEvent = () => {
     return currentEvent.creator === currentUser.userId;
@@ -142,14 +166,15 @@ const EventDetailsScreen = () => {
               }}
             >
               Edit
-            </Button>,
+            </Button>
+            ,
             <Button
               size="small"
               variant="contained"
               color="primary"
-              onClick={() => deleteOnClick(currentEvent.id)}              
+              onClick={() => deleteOnClick(currentEvent.id)}
             >
-              Delete 
+              Delete
             </Button>
           </ButtonGroup>
         )}
@@ -157,7 +182,8 @@ const EventDetailsScreen = () => {
 
       <Divider />
       <Box display="flex" justifyContent="space-around">
-        {currentEvent.event_date && new Date(currentEvent.event_date).toDateString()}
+        {currentEvent.event_date &&
+          new Date(currentEvent.event_date).toDateString()}
         <span>{creator.username}</span>
       </Box>
       <p>{currentEvent.description}</p>
@@ -167,13 +193,21 @@ const EventDetailsScreen = () => {
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
             <div className="going-to-items">
-                <CardContent>
-                  <InterestField {...interest} disabled={true} />
-                </CardContent>
+              <CardContent>
+                <InterestField {...interest} disabled={true} />
+              </CardContent>
             </div>
           </Card>
         ))}
-      <Divider />
+      <Box component="fieldset" mb={3} borderColor="transparent">
+        {/* <Rating
+          name="simple-controlled"
+          value={rating}
+          onChange={(event, newValue) => {
+            setRating(newValue);
+          }}
+        /> */}
+      </Box>
       <Box>
         <ButtonGroup style={{ marginTop: "15px" }} variant="outlined">
           <Button
@@ -191,7 +225,7 @@ const EventDetailsScreen = () => {
           <Button
             onClick={leaveEvent}
             variant={
-              ATTENDANCE_STATUS.Rejected === attendanceStatus
+              ATTENDANCE_STATUS.Rejected === attendanceStatus || ATTENDANCE_STATUS.Pending === attendanceStatus
                 ? "contained"
                 : "outlined"
             }
@@ -202,7 +236,13 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
-      {isOwnEvent() && <InviteAttendeeForm attendance={ATTENDANCE_STATUS.Pending} eventId={currentEvent.id} style={{ marginTop: "15px" }} />}
+      {isOwnEvent() && (
+        <InviteAttendeeForm
+          attendance={ATTENDANCE_STATUS.Pending}
+          eventId={currentEvent.id}
+          style={{ marginTop: "15px" }}
+        />
+      )}
     </Box>
   );
 };
