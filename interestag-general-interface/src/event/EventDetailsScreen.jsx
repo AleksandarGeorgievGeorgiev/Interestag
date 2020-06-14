@@ -9,6 +9,7 @@ import {
   TextField,
   SwipeableDrawer,
   Slider,
+  Paper
 } from "@material-ui/core";
 
 import { InterestField } from "./InterestField";
@@ -19,6 +20,7 @@ import CardContent from "@material-ui/core/CardContent";
 // import Rating from "@material-ui/lab/Rating";
 import { Redirect } from "react-router-dom";
 
+import { RateInterestsForm } from './RateInterestsForm';
 import { useProtectedApi } from "../core/useProtectedApi";
 
 const ATTENDANCE_STATUS = {
@@ -36,7 +38,8 @@ const EventDetailsScreen = () => {
   const { state: eventFromHistory } = history.location;
   const { id: eventId } = useParams();
   const protectedApi = useProtectedApi();
-  const [rating, setRating] = useState(false);
+  const [drawerOpen, setOpen] = useState(false);
+  const [interestRatings, setInterestRatings] = useState({});
 
   useEffect(() => {
     if (eventFromHistory) {
@@ -56,19 +59,37 @@ const EventDetailsScreen = () => {
       getAttendanceStatus(eventData.id),
     ]).then(([creator, attendance]) => {
       setCreator(creator);
+
       setAttendanceStatus(
         attendance.invitation_status || ATTENDANCE_STATUS.Rejected
       );
+
+      const eventAttendance = {
+        id: attendance.id,
+        user: attendance.user,
+        userInterests: attendance.eventatendeeintereset_set,
+      };
+      
       setCurrentEvent({
         ...eventData,
-        attendance: {
-          id: attendance.id,
-          user: attendance.user,
-          userInterests: attendance.eventatendeeintereset_set,
-        },
+        attendance: eventAttendance,
       });
+
+      initializeRatings(eventAttendance);
     });
   };
+
+  const initializeRatings = (attendance) => {
+    let scores = {};
+    attendance.userInterests.forEach(interestRating => {
+      scores = {
+        ...scores,
+        [interestRating.interest]: interestRating.score,
+      };
+    });
+
+    setInterestRatings(scores);
+  }
 
   const getCreatorData = (creatorId) => {
     return protectedApi
@@ -84,11 +105,7 @@ const EventDetailsScreen = () => {
           ({ event: e }) => e.id === eventId
         );
 
-        if (attendanceFound) {
-          return attendanceFound;
-        }
-
-        return {};
+        return attendanceFound || {};
       });
   };
 
@@ -117,8 +134,6 @@ const EventDetailsScreen = () => {
           };
           setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
           setAttendanceStatus(res.data.invitation_status);
-
-          //TODO: Rate event interests
         });
     }
   };
@@ -151,14 +166,31 @@ const EventDetailsScreen = () => {
     return currentEvent.creator === currentUser.userId;
   };
 
-  const getInterestRating = (interestId) => {
-    if (!currentEvent.attendance.userInterests) {
-      return 0;
+  const ratingChanged = (interestId, newValue) => {
+    const scores = {
+      ...interestRatings,
+      [interestId]: newValue
     }
 
-    const interestFound = currentEvent.attendance.userInterests.find(i => i.interest === interestId);
+    setInterestRatings(scores);
+  }
 
-    return interestFound ? interestFound.score : 0;
+  const confirmRating = () => {
+    for(let [interestId, interestRating] of Object.entries(interestRatings)) {
+      protectedApi
+        .post('/api/event-attendee-interest/', {
+          atendee: currentEvent.attendance.id,
+          interest: interestId,
+          score: interestRating,
+        })
+        .catch(err => initializeRatings(currentEvent.attendance))
+        .finally(() => setOpen(false));
+    } 
+  }
+
+  const cancelRating = () => {
+    initializeRatings(currentEvent.attendance);
+    setOpen(false);
   }
 
   return (
@@ -205,7 +237,7 @@ const EventDetailsScreen = () => {
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
             <div style={{
-              background: `linear-gradient(90deg, ${interest.colour} ${getInterestRating(interest.id) * 10}%, #FFFFFF ${getInterestRating(interest.id) * 10}%)`
+              background: `linear-gradient(90deg, ${interest.colour} ${(interestRatings[interest.id] || 0) * 10}%, #FFFFFF ${(interestRatings[interest.id] || 0) * 10}%)`
             }}
             >
               <CardContent>
@@ -214,15 +246,6 @@ const EventDetailsScreen = () => {
             </div>
           </Card>
         ))}
-      <Box component="fieldset" mb={3} borderColor="transparent">
-        {/* <Rating
-          name="simple-controlled"
-          value={rating}
-          onChange={(event, newValue) => {
-            setRating(newValue);
-          }}
-        /> */}
-      </Box>
       <Box>
         <ButtonGroup style={{ marginTop: "15px" }} variant="outlined">
           <Button
@@ -251,7 +274,7 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
-      {ATTENDANCE_STATUS.Accepted === attendanceStatus && <Button onClick={() => setRating(true)}>Rate</Button>}
+      {ATTENDANCE_STATUS.Accepted === attendanceStatus && <Button onClick={() => setOpen(true)}>Rate</Button>}
       {isOwnEvent() && (
         <InviteAttendeeForm
           attendance={ATTENDANCE_STATUS.Pending}
@@ -260,27 +283,14 @@ const EventDetailsScreen = () => {
         />
       )}
 
-      <SwipeableDrawer anchor={'bottom'} open={rating} onClose={() => setRating(false)}>
-        <h3>Rate Interests</h3>
-        <Divider />
-        {currentEvent.interest_set &&
-          currentEvent.interest_set.map((interest, index) => (
-            <Card key={index}>
-              <div>
-                <CardContent>
-                  <InterestField {...interest} disabled={true} />
-                  <Slider
-                    marks={true}
-                    step={1}
-                    min={0}
-                    max={10}
-                    valueLabelDisplay={'auto'}
-                    value={getInterestRating(interest.id)}
-                  />
-                </CardContent>
-              </div>
-            </Card>
-          ))}
+      <SwipeableDrawer anchor={'bottom'} open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
+        <RateInterestsForm 
+          interests={currentEvent.interest_set} 
+          ratings={interestRatings} 
+          confirmRatings={confirmRating}
+          cancelAction={cancelRating}
+          ratingChangeHandler={ratingChanged}
+        />
       </SwipeableDrawer>
     </Box>
   );
