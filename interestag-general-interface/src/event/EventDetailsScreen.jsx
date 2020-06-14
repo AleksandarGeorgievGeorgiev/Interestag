@@ -91,7 +91,7 @@ const EventDetailsScreen = () => {
   };
 
   const joinEvent = () => {
-    if(attendanceStatus == ATTENDANCE_STATUS.Pending){
+    if(attendanceStatus === ATTENDANCE_STATUS.Pending){
       protectedApi
       .patch(
         `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
@@ -149,6 +149,16 @@ const EventDetailsScreen = () => {
     return currentEvent.creator === currentUser.userId;
   };
 
+  const getInterestRating = (interestId) => {
+    if(!currentEvent.attendance) {
+      return 0;
+    }
+
+    const interestFound = currentEvent.attendance.userInterests.find(i => i.interest === interestId);
+
+    return interestFound ? interestFound.score : 0;
+  }
+
   return (
     <Box className="body" display="flex" flexDirection="column">
       <Box display="flex" justifyContent="center">
@@ -192,7 +202,10 @@ const EventDetailsScreen = () => {
       {currentEvent.interest_set &&
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
-            <div className="going-to-items">
+            <div style={{
+                background: `linear-gradient(90deg, ${interest.colour} ${getInterestRating(interest.id) * 10}%, #FFFFFF ${getInterestRating(interest.id) * 10}%)`
+              }}
+            >
               <CardContent>
                 <InterestField {...interest} disabled={true} />
               </CardContent>
