@@ -7,6 +7,8 @@ import {
   Button,
   ButtonGroup,
   TextField,
+  SwipeableDrawer,
+  Slider,
 } from "@material-ui/core";
 
 import { InterestField } from "./InterestField";
@@ -34,8 +36,8 @@ const EventDetailsScreen = () => {
   const { state: eventFromHistory } = history.location;
   const { id: eventId } = useParams();
   const protectedApi = useProtectedApi();
-  const [rating, setRating] = useState({});
-        
+  const [rating, setRating] = useState(false);
+
   useEffect(() => {
     if (eventFromHistory) {
       setEventData(eventFromHistory);
@@ -91,17 +93,17 @@ const EventDetailsScreen = () => {
   };
 
   const joinEvent = () => {
-    if(attendanceStatus === ATTENDANCE_STATUS.Pending){
+    if (attendanceStatus === ATTENDANCE_STATUS.Pending) {
       protectedApi
-      .patch(
-        `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
-        {
-          invitation_status: ATTENDANCE_STATUS.Accepted,
-        }
-      )
-      .then((res) => setAttendanceStatus(res.data.invitation_status));
+        .patch(
+          `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
+          {
+            invitation_status: ATTENDANCE_STATUS.Accepted,
+          }
+        )
+        .then((res) => setAttendanceStatus(res.data.invitation_status));
     }
-    else{
+    else {
       protectedApi
         .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
           user: currentUser.userId,
@@ -115,10 +117,10 @@ const EventDetailsScreen = () => {
           };
           setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
           setAttendanceStatus(res.data.invitation_status);
-    
+
           //TODO: Rate event interests
         });
-      } 
+    }
   };
 
   const leaveEvent = () => {
@@ -150,7 +152,7 @@ const EventDetailsScreen = () => {
   };
 
   const getInterestRating = (interestId) => {
-    if(!currentEvent.attendance) {
+    if (!currentEvent.attendance.userInterests) {
       return 0;
     }
 
@@ -203,8 +205,8 @@ const EventDetailsScreen = () => {
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
             <div style={{
-                background: `linear-gradient(90deg, ${interest.colour} ${getInterestRating(interest.id) * 10}%, #FFFFFF ${getInterestRating(interest.id) * 10}%)`
-              }}
+              background: `linear-gradient(90deg, ${interest.colour} ${getInterestRating(interest.id) * 10}%, #FFFFFF ${getInterestRating(interest.id) * 10}%)`
+            }}
             >
               <CardContent>
                 <InterestField {...interest} disabled={true} />
@@ -249,6 +251,7 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
+      {ATTENDANCE_STATUS.Accepted === attendanceStatus && <Button onClick={() => setRating(true)}>Rate</Button>}
       {isOwnEvent() && (
         <InviteAttendeeForm
           attendance={ATTENDANCE_STATUS.Pending}
@@ -256,6 +259,29 @@ const EventDetailsScreen = () => {
           style={{ marginTop: "15px" }}
         />
       )}
+
+      <SwipeableDrawer anchor={'bottom'} open={rating} onClose={() => setRating(false)}>
+        <h3>Rate Interests</h3>
+        <Divider />
+        {currentEvent.interest_set &&
+          currentEvent.interest_set.map((interest, index) => (
+            <Card key={index}>
+              <div>
+                <CardContent>
+                  <InterestField {...interest} disabled={true} />
+                  <Slider
+                    marks={true}
+                    step={1}
+                    min={0}
+                    max={10}
+                    valueLabelDisplay={'auto'}
+                    value={getInterestRating(interest.id)}
+                  />
+                </CardContent>
+              </div>
+            </Card>
+          ))}
+      </SwipeableDrawer>
     </Box>
   );
 };
