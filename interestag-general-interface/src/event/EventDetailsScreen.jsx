@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 
 import { InterestField } from "./InterestField";
+import Ripples from "react-ripples";
 import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
@@ -149,6 +150,10 @@ const EventDetailsScreen = () => {
     return currentEvent.creator === currentUser.userId;
   };
 
+  const clickedInterest = (interest) => {
+
+  }
+
   return (
     <Box className="body" display="flex" flexDirection="column">
       <Box display="flex" justifyContent="center">
@@ -193,9 +198,11 @@ const EventDetailsScreen = () => {
         currentEvent.interest_set.map((interest, index) => (
           <Card key={index}>
             <div className="going-to-items">
-              <CardContent>
-                <InterestField {...interest} disabled={true} />
-              </CardContent>
+              <Ripples>
+                <CardContent onClick={() => clickedInterest(interest)}>
+                  <InterestField {...interest} disabled={true} />
+                </CardContent>
+              </Ripples>
             </div>
           </Card>
         ))}
