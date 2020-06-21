@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 
 import { InterestField } from "./InterestField";
+import Ripples from "react-ripples";
 import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
