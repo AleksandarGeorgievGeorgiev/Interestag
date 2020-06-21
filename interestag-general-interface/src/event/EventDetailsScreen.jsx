@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 
 import { InterestField } from "./InterestField";
-import Ripples from "react-ripples";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
@@ -41,6 +41,7 @@ const EventDetailsScreen = () => {
   const protectedApi = useProtectedApi();
   const [drawerOpen, setOpen] = useState(false);
   const [interestRatings, setInterestRatings] = useState({});
+  const [eventAttendanceData, setEventAttendanceData] = useState({});
 
   useEffect(() => {
     if (eventFromHistory) {
@@ -70,13 +71,17 @@ const EventDetailsScreen = () => {
         user: attendance.user,
         userInterests: attendance.eventatendeeintereset_set,
       };
+
+      setEventAttendanceData(eventAttendance)
       
       setCurrentEvent({
         ...eventData,
         attendance: eventAttendance,
       });
 
-      initializeRatings(eventAttendance);
+      if(attendance.id !== undefined){
+        initializeRatings(eventAttendance);
+      }
     });
   };
 
@@ -86,7 +91,7 @@ const EventDetailsScreen = () => {
       scores = {
         ...scores,
         [interestRating.interest]: interestRating.score,
-      };
+      };  
     });
 
     setInterestRatings(scores);
@@ -194,6 +199,7 @@ const EventDetailsScreen = () => {
     setOpen(false);
   }
 
+
   return (
     <Box className="body" display="flex" flexDirection="column">
       <Box display="flex" justifyContent="center">
@@ -283,7 +289,6 @@ const EventDetailsScreen = () => {
           style={{ marginTop: "15px" }}
         />
       )}
-
       <SwipeableDrawer anchor={'bottom'} open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
         <RateInterestsForm 
           interests={currentEvent.interest_set} 

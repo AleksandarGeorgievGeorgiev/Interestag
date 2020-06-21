@@ -4,8 +4,7 @@ import axios from 'axios';
 import { Button } from '@material-ui/core';
 
 import { UserContext } from '../user-context/UserContextProvider';
-import { Header } from '../core/Header';
-
+import logo from '../resources/TestGraphTablet.png';
 import { useProtectedApi } from '../core/useProtectedApi';
 
 const Home = () => {
@@ -20,11 +19,8 @@ const Home = () => {
   };
 
   return (
-    <div className="body">
-      <h1>Home</h1>
-      {hello}
-      <br />
-      <Button color="secondary" variant="contained" onClick={testApi}>Test Me</Button>
+    <div className="home-body">
+      <img src={logo} alt="Logo" className="home-logo" />
     </div>
   );
 };

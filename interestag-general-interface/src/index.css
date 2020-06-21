@@ -112,6 +112,14 @@ ul {
   height: 15vmin;
   pointer-events: none;
 }
+.home-logo{
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.home-body{
+  margin-top: 245px;
+}
 
 .body {
   margin: 65px auto;
