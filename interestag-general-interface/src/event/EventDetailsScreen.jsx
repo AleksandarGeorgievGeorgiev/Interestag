@@ -18,11 +18,11 @@ import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-// import Rating from "@material-ui/lab/Rating";
 import { Redirect } from "react-router-dom";
 
 import { RateInterestsForm } from './RateInterestsForm';
 import { useProtectedApi } from "../core/useProtectedApi";
+import { DownloadPrintables } from './DownloadPrintables';
 
 const ATTENDANCE_STATUS = {
   Pending: 1,
@@ -281,7 +281,14 @@ const EventDetailsScreen = () => {
           </Button>
         </ButtonGroup>
       </Box>
-      {ATTENDANCE_STATUS.Accepted === attendanceStatus && <Button onClick={() => setOpen(true)}>Rate</Button>}
+      {ATTENDANCE_STATUS.Accepted === attendanceStatus && 
+        <Button onClick={() => setOpen(true)}>Rate</Button>
+      }
+      <DownloadPrintables 
+        currentUser={currentUser} 
+        attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
+        eventInterests={currentEvent.interest_set}
+      />
       {isOwnEvent() && (
         <InviteAttendeeForm
           attendance={ATTENDANCE_STATUS.Pending}
@@ -298,6 +305,8 @@ const EventDetailsScreen = () => {
           ratingChangeHandler={ratingChanged}
         />
       </SwipeableDrawer>
+
+      
     </Box>
   );
 };
