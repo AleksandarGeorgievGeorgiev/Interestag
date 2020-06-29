@@ -11,6 +11,7 @@ import {
   Slider,
   Paper
 } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
 import { InterestField } from "./InterestField";
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -18,6 +19,7 @@ import { UserContext } from "../user-context/UserContextProvider";
 import { InviteAttendeeForm } from "./InviteAttendeeForm";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import ColorLensIcon from '@material-ui/icons/ColorLens';
 import { Redirect } from "react-router-dom";
 
 import { RateInterestsForm } from './RateInterestsForm';
@@ -29,6 +31,33 @@ const ATTENDANCE_STATUS = {
   Accepted: 2,
   Rejected: 3,
 };
+
+const useCss = makeStyles({
+  eventActionBar: {
+    overflow: 'hidden',
+    position: 'fixed',
+    bottom: '56px',
+    backgroundColor: '#edeaf5',
+    justifyContent: 'space-between',
+    padding: '4px 8px',
+    display: 'flex',
+    width: '100%',
+    margin: '0 -15px',
+  },
+  rateInterestsButton: {
+    color: '#a8509e',
+  },
+  goingSelected: {
+    backgroundColor: '#69bd45'
+  },
+  notGoingSelected: {
+    backgroundColor: '#ed1f24',
+  },
+  goingPending: {
+    color: '#faa21a',
+    borderColor: '#faa21a',
+  },
+});
 
 const EventDetailsScreen = () => {
   const history = useHistory();
@@ -42,6 +71,7 @@ const EventDetailsScreen = () => {
   const [drawerOpen, setOpen] = useState(false);
   const [interestRatings, setInterestRatings] = useState({});
   const [eventAttendanceData, setEventAttendanceData] = useState({});
+  const css = useCss();
 
   useEffect(() => {
     if (eventFromHistory) {
@@ -73,13 +103,13 @@ const EventDetailsScreen = () => {
       };
 
       setEventAttendanceData(eventAttendance)
-      
+
       setCurrentEvent({
         ...eventData,
         attendance: eventAttendance,
       });
 
-      if(attendance.id !== undefined){
+      if (attendance.id !== undefined) {
         initializeRatings(eventAttendance);
       }
     });
@@ -91,7 +121,7 @@ const EventDetailsScreen = () => {
       scores = {
         ...scores,
         [interestRating.interest]: interestRating.score,
-      };  
+      };
     });
 
     setInterestRatings(scores);
@@ -182,16 +212,16 @@ const EventDetailsScreen = () => {
   }
 
   const confirmRating = () => {
-    for(let [interestId, interestRating] of Object.entries(interestRatings)) {
+    for (let [interestId, interestRating] of Object.entries(interestRatings)) {
       protectedApi
         .post('/api/event-attendee-interest/', {
           atendee: currentEvent.attendance.id,
           interest: interestId,
           score: interestRating,
-        })
+        }) //TODO .then(update event attendance with new eventattendeeinterest_set)
         .catch(err => initializeRatings(currentEvent.attendance))
         .finally(() => setOpen(false));
-    } 
+    }
   }
 
   const cancelRating = () => {
@@ -254,38 +284,11 @@ const EventDetailsScreen = () => {
           </Card>
         ))}
       <Box>
-        <ButtonGroup style={{ marginTop: "15px" }} variant="outlined">
-          <Button
-            onClick={joinEvent}
-            variant={
-              ATTENDANCE_STATUS.Accepted === attendanceStatus
-                ? "contained"
-                : "outlined"
-            }
-            size="large"
-            color="primary"
-          >
-            Going
-          </Button>
-          <Button
-            onClick={leaveEvent}
-            variant={
-              ATTENDANCE_STATUS.Rejected === attendanceStatus || ATTENDANCE_STATUS.Pending === attendanceStatus
-                ? "contained"
-                : "outlined"
-            }
-            size="large"
-            color="primary"
-          >
-            Not going
-          </Button>
-        </ButtonGroup>
+
       </Box>
-      {ATTENDANCE_STATUS.Accepted === attendanceStatus && 
-        <Button onClick={() => setOpen(true)}>Rate</Button>
-      }
-      <DownloadPrintables 
-        currentUser={currentUser} 
+
+      <DownloadPrintables
+        currentUser={currentUser}
         attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
         eventInterests={currentEvent.interest_set}
       />
@@ -297,16 +300,47 @@ const EventDetailsScreen = () => {
         />
       )}
       <SwipeableDrawer anchor={'bottom'} open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
-        <RateInterestsForm 
-          interests={currentEvent.interest_set} 
-          ratings={interestRatings} 
+        <RateInterestsForm
+          interests={currentEvent.interest_set}
+          ratings={interestRatings}
           confirmRatings={confirmRating}
           cancelAction={cancelRating}
           ratingChangeHandler={ratingChanged}
         />
       </SwipeableDrawer>
-
-      
+      <Box className={css.eventActionBar}>
+        <ButtonGroup variant="outlined" classes={attendanceStatus === ATTENDANCE_STATUS.Pending ? { groupedOutlined: css.goingPending } : {}}>
+          <Button
+            onClick={joinEvent}
+            classes={{ contained: css.goingSelected }}
+            variant={
+              ATTENDANCE_STATUS.Accepted === attendanceStatus
+                ? "contained"
+                : "outlined"
+            }
+            size="large"
+            color="primary"
+          >
+            Going
+            </Button>
+          <Button
+            onClick={leaveEvent}
+            classes={{ contained: css.notGoingSelected }}
+            variant={
+              ATTENDANCE_STATUS.Rejected === attendanceStatus
+                ? "contained"
+                : "outlined"
+            }
+            size="large"
+            color="primary"
+          >
+            Not going
+            </Button>
+        </ButtonGroup>
+        {ATTENDANCE_STATUS.Accepted === attendanceStatus &&
+          <Button onClick={() => setOpen(true)}><ColorLensIcon className={css.rateInterestsButton}/></Button>
+        }
+      </Box>
     </Box>
   );
 };

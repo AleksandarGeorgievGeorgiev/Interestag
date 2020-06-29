@@ -24,13 +24,13 @@ code {
   background-color: #edeaf5;
 }
 
-.MuiSvgIcon-root{
+/* .MuiSvgIcon-root{
   color: black;
 }
 
 .MuiBottomNavigationAction-label{
   color: black;
-}
+} */
 
 .MuiButtonBase-root.MuiButton-text.custom-fab-button{
   background-color:#9984d4;
@@ -119,10 +119,6 @@ ul {
 
 .home-body{
   margin-top: 245px;
-}
-
-.body {
-  margin: 65px auto;
 }
 
 .my-facebook-button-class{
