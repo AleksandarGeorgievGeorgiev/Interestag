@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Home } from './home/Home';
 import { Profile } from './profile/Profile';
@@ -17,12 +18,19 @@ import { EnforceAnonymousRoute } from './user-context/EnforceAnonymousRoute';
 import { EventDetailsScreen } from './event/EventDetailsScreen';
 import { EditEventForm } from './event/EditEventForm';
 
-import { useTokenInterceptor } from './user-context/useTokenInterceptor';
+const useCss = makeStyles({
+  body: {
+    gridArea: 'body',
+    marginTop: '70px',
+    padding: '0 15px',
+  },
+});
 
 function App() {
   const testName = 'Welcome to ProEp';
   const { isAuthenticated } = useContext(UserContext);
-  
+  const css = useCss();
+
   const renderRoutes = () => {
     return (
       <Switch>
@@ -30,7 +38,7 @@ function App() {
         <PrivateRoute authed={isAuthenticated()} exact path="/event/:id/edit"><EditEventForm /></PrivateRoute>
         <Route path="/event/:id"><EventDetailsScreen /></Route>
 
-        <Route exact path="/" component={Home}/>
+        <Route exact path="/" component={Home} />
         <Route path="/discover" ><DiscoverEventScreen /></Route>
 
         <PrivateRoute authed={isAuthenticated()} path="/profile/:id"><Profile /></PrivateRoute>
@@ -42,10 +50,12 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <AppTopBar/>
+    <div>
+      <AppTopBar />
+      <div className={css.body}>
         {renderRoutes()}
-      <BottomNavBar/>
+      </div>
+      <BottomNavBar />
     </div>
   );
 }
