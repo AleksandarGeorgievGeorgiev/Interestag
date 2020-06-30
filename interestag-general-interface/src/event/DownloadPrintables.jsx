@@ -51,13 +51,11 @@ const DownloadPrintables = ({ currentUser, attendeeInterests, eventInterests }) 
   return (
     <Box display="flex" justifyContent="center">
       <Button
-        variant="contained"
-        color="primary"
+        variant="outlined"
         onClick={downloadTag}
       >Tag</Button>
       <Button
-        variant="contained"
-        color="primary"
+        variant="outlined"
         onClick={downloadLegend}
       >Legend</Button>
     </Box>

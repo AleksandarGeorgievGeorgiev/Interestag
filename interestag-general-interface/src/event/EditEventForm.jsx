@@ -149,7 +149,7 @@ function EditEventForm() {
   }
 
   return (
-    <form>
+    <form className="body">
       <h3>Event Details</h3>
       <Divider />
       <TextField
@@ -235,7 +235,7 @@ function EditEventForm() {
         >
           <ArrowBackIosIcon style={{ color: '#fff' }} fontSize={'small'} />
         Back
-      </Fab>
+        </Fab>
         <Fab
           variant="extended"
           size="medium"

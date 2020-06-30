@@ -12,6 +12,9 @@ import {
   Paper
 } from "@material-ui/core";
 
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { InterestField } from "./InterestField";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import { UserContext } from "../user-context/UserContextProvider";
@@ -203,10 +206,14 @@ const EventDetailsScreen = () => {
   return (
     <Box className="body" display="flex" flexDirection="column">
       <Box display="flex" justifyContent="center">
-        <h3>{currentEvent.name}</h3>
+        <DownloadPrintables 
+          currentUser={currentUser} 
+          attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
+          eventInterests={currentEvent.interest_set}
+        />
         {isOwnEvent() && (
           <ButtonGroup style={{ marginLeft: "auto" }}>
-            <Button
+            <IconButton
               size="small"
               variant="contained"
               color="primary"
@@ -215,22 +222,26 @@ const EventDetailsScreen = () => {
                 pathname: `/event/${currentEvent.id}/edit/`,
                 state: currentEvent,
               }}
+              icon
             >
-              Edit
-            </Button>
+              <EditIcon/>
+            </IconButton>
             ,
-            <Button
+            <IconButton
               size="small"
               variant="contained"
               color="primary"
               onClick={() => deleteOnClick(currentEvent.id)}
             >
-              Delete
-            </Button>
+              <DeleteIcon/>
+            </IconButton>
           </ButtonGroup>
         )}
       </Box>
-
+      <Divider />
+      <Box display="flex" justifyContent="center">
+        <h3>{currentEvent.name}</h3>
+      </Box>
       <Divider />
       <Box display="flex" justifyContent="space-around">
         {currentEvent.event_date &&
@@ -284,11 +295,7 @@ const EventDetailsScreen = () => {
       {ATTENDANCE_STATUS.Accepted === attendanceStatus && 
         <Button onClick={() => setOpen(true)}>Rate</Button>
       }
-      <DownloadPrintables 
-        currentUser={currentUser} 
-        attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
-        eventInterests={currentEvent.interest_set}
-      />
+      
       {isOwnEvent() && (
         <InviteAttendeeForm
           attendance={ATTENDANCE_STATUS.Pending}
