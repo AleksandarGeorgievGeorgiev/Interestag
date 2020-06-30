@@ -6,6 +6,10 @@ import { useHistory } from 'react-router-dom';
 
 import { useProtectedApi } from '../core/useProtectedApi';
 
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Ripples from "react-ripples";
+import {Box} from "@material-ui/core"
 
 const Profile = () => {
   const { currentUser } = useContext(UserContext);
@@ -17,10 +21,10 @@ const Profile = () => {
   //([]) -> Празен array в JavaScript
   const [ownEvents, setOwnEvents] = useState([]);
 
-  //ползваме РЕАКТ функция, я която правим наша функция, в която взимаме local host-a от .env и добавяме endpoint-овете (/api/event/), които взехме от POSTMAN 
+  //ползваме РЕАКТ функция, я която правим наша функция, в която взимаме local host-a от .env и добавяме endpoint-овете (/api/event/), които взехме от POSTMAN
   useEffect(() => {
     protectedApi.get(`${process.env.REACT_APP_BASEURL}/api/event/`)
-    // пишем then, защото искаме да разберем какво става след като ни върне успешно изпълнена заявка 
+    // пишем then, защото искаме да разберем какво става след като ни върне успешно изпълнена заявка
       .then((res) => {
         setOwnEvents(res.data);
       });
@@ -28,14 +32,14 @@ const Profile = () => {
 
   const clickedEvent = (event) => {
     navigationHistory.push({
-      pathname: `/event/${event.id}/`, 
+      pathname: `/event/${event.id}/`,
       state: { ...event }
     });
   }
 
   const clickedEventEdit = (event) => {
     navigationHistory.push({
-      pathname: `/event/${event.id}/edit`, 
+      pathname: `/event/${event.id}/edit`,
       state: { ...event }
     });
   }
@@ -43,21 +47,26 @@ const Profile = () => {
   return (
 <div className="body">
     <div>
-      <div> 
+      <div>
       <img className="profilepic" src="../Images/me.jpg"/>
       </div>
-    <div className="name"> Alekssandra Belcheva </div>
-    <div className="username"> username: {currentUser.username} </div>
+    <div className="username"> Username: {currentUser.username} </div>
       {/* взимаш array-я и му "мапваш" пропъртитата на обекта */}
     {ownEvents.map(event => (
-      <div key={event.id} className="eventBox">
-        <div className="date">{new Date(event.event_date).toDateString()}</div>
-        <div onClick={() => { clickedEvent(event) }} className="eventName">{event.name}</div>
-        <button onClick={() => { clickedEventEdit(event) }} className="edit"> {<CreateIcon />}</button>
-      </div>
+      <Card key={event.id} style={{ marginTop: "10px" }}>
+        <div className="going-to-items">
+          <Ripples>
+            <CardContent onClick={() => clickedEvent(event)}>
+              <Box display="flex" justifyContent="center">
+                <div>{event.name} | {new Date(event.event_date).toDateString()}</div>
+              </Box>
+            </CardContent>
+          </Ripples>
+        </div>
+      </Card>
     ))
-    }         
-  </div> 
+    }
+  </div>
 </div>
   );
 };

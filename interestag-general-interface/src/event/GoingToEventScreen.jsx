@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Ripples from "react-ripples";
 import Divider from '@material-ui/core/Divider';
 import WarningIcon from '@material-ui/icons/Warning';
+import {Box} from '@material-ui/core';
 
 import { useProtectedApi } from '../core/useProtectedApi';
 
@@ -41,8 +42,10 @@ const GoingToEventScreen = () => {
             <div className="pending-items">
               <Ripples>
                 <CardContent onClick={() => clickedEvent(event)} >
-                  <div><WarningIcon className="pending-icon"/></div> 
-                  <div>{event.event.name} | {new Date(event.event.event_date).toDateString()}</div>
+                  <Box display="flex" justifyContent="center">
+                      <div>{event.event.name} | {new Date(event.event.event_date).toDateString()} </div>
+                      <div><WarningIcon className="pending-icon"/></div> 
+                  </Box>
                 </CardContent>
               </Ripples>
             </div>

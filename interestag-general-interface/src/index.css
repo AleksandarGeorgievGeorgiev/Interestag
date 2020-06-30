@@ -11,6 +11,7 @@ body {
   right: 0;
   /* margin-bottom: 50px; */
   text-align: center;
+  background-color: #dff8f2;
 }
 
 code {
@@ -147,7 +148,7 @@ line-height: 150%;
 .username{
 font-size: 18px;
 line-height: 150%;
-color: #C7ABBA;
+color: rgb(26, 25, 25);
 }
 
 .eventBox{
@@ -190,8 +191,17 @@ color: #C7ABBA;
   background-color: #c6ece3;
 }
 .pending-items{
-  background-color: #c2d60d;
+  background-color: #c6ece3;
 }
 .MuiSvgIcon-root.pending-icon{
   color: rgb(255, 174, 0);
+}
+
+.download-edit-delete-button-group{
+  overflow: hidden;
+    bottom: 56px;
+    background-color: #edeaf5;
+    padding: 4px auto;
+    width: 100%;
+    border-radius: 7px;
 }

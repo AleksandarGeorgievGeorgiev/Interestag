@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 
+import GradeIcon from '@material-ui/icons/Grade';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -42,13 +43,15 @@ const useCss = makeStyles({
     bottom: '56px',
     backgroundColor: '#edeaf5',
     justifyContent: 'space-between',
-    padding: '4px 8px',
+    padding: '4px auto',
     display: 'flex',
     width: '100%',
-    margin: '0 -15px',
+    borderRadius: '7px',
+    marginLeft: '-15px'
   },
   rateInterestsButton: {
-    color: '#a8509e',
+    color: '#ffd300',
+    // color: '#a8509e',
   },
   goingSelected: {
     backgroundColor: '#69bd45'
@@ -235,7 +238,7 @@ const EventDetailsScreen = () => {
 
   return (
     <Box className="body" display="flex" flexDirection="column">
-      <Box display="flex" justifyContent="center">
+      <Box className="download-edit-delete-button-group" display="flex" justifyContent="center">
         <DownloadPrintables 
           currentUser={currentUser} 
           attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
@@ -294,31 +297,6 @@ const EventDetailsScreen = () => {
             </div>
           </Card>
         ))}
-      <Box>
-
-      </Box>
-
-      <DownloadPrintables
-        currentUser={currentUser}
-        attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
-        eventInterests={currentEvent.interest_set}
-      />
-      {isOwnEvent() && (
-        <InviteAttendeeForm
-          attendance={ATTENDANCE_STATUS.Pending}
-          eventId={currentEvent.id}
-          style={{ marginTop: "15px" }}
-        />
-      )}
-      <SwipeableDrawer anchor={'bottom'} open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
-        <RateInterestsForm
-          interests={currentEvent.interest_set}
-          ratings={interestRatings}
-          confirmRatings={confirmRating}
-          cancelAction={cancelRating}
-          ratingChangeHandler={ratingChanged}
-        />
-      </SwipeableDrawer>
       <Box className={css.eventActionBar}>
         <ButtonGroup variant="outlined" classes={attendanceStatus === ATTENDANCE_STATUS.Pending ? { groupedOutlined: css.goingPending } : {}}>
           <Button
@@ -349,13 +327,9 @@ const EventDetailsScreen = () => {
             </Button>
         </ButtonGroup>
         {ATTENDANCE_STATUS.Accepted === attendanceStatus &&
-          <Button onClick={() => setOpen(true)}><ColorLensIcon className={css.rateInterestsButton}/></Button>
+          <Button onClick={() => setOpen(true)}><GradeIcon className={css.rateInterestsButton}/></Button>
         }
       </Box>
-      {ATTENDANCE_STATUS.Accepted === attendanceStatus && 
-        <Button onClick={() => setOpen(true)}>Rate</Button>
-      }
-      
       {isOwnEvent() && (
         <InviteAttendeeForm
           attendance={ATTENDANCE_STATUS.Pending}
@@ -371,9 +345,7 @@ const EventDetailsScreen = () => {
           cancelAction={cancelRating}
           ratingChangeHandler={ratingChanged}
         />
-      </SwipeableDrawer>
-
-      
+      </SwipeableDrawer>    
     </Box>
   );
 };
