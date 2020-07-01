@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -9,8 +10,15 @@ import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 
 import { UserContext } from '../user-context/UserContextProvider';
 
+const useCss = makeStyles({
+  root: {
+    backgroundColor: '#edeaf5',
+  }
+});
+
 function AppTopBar({ props }) {
   const { isAuthenticated, deauthenticateUser } = useContext(UserContext);
+  const css = useCss();
 
   function HideOnScroll(props) {
     const { children, window } = props;
@@ -28,7 +36,7 @@ function AppTopBar({ props }) {
 
   return (
     <HideOnScroll {...props}>
-    <AppBar className="AppBar" style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <AppBar classes={{ root: css.root }} position="relative" style={{ flexDirection: 'row', justifyContent: 'center' }}>
       <div className="app-top-bar-icon">
         <img src={logo} alt="Logo" className="app-logo" />
       </div>

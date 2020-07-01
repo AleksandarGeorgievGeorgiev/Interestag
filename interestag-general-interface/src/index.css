@@ -12,6 +12,7 @@ body {
   /* margin-bottom: 50px; */
   text-align: center;
   background-color: #dff8f2;
+  height: 100%;
 }
 
 code {
@@ -22,7 +23,6 @@ code {
 .MuiPaper-root.AppBar{
   text-align: center;
   position: fixed;
-  background-color: #edeaf5;
 }
 
 /* .MuiSvgIcon-root{
@@ -61,13 +61,6 @@ code {
   font-weight: bold;
 }
 
-.MuiBottomNavigation-root.bottom-nav-custom-css{
-  overflow: hidden;
-  background-color:#9984d4;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
 .MuiButtonBase-root .MuiListItem-root .MuiListItem-button .listItem {
   background-color:#9984d4;
 }

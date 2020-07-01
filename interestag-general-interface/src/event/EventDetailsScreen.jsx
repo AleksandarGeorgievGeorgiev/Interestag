@@ -43,7 +43,7 @@ const useCss = makeStyles({
     bottom: '56px',
     backgroundColor: '#edeaf5',
     justifyContent: 'space-between',
-    padding: '4px auto',
+    padding: '5px 12px',
     display: 'flex',
     width: '100%',
     borderRadius: '7px',
@@ -219,12 +219,23 @@ const EventDetailsScreen = () => {
 
   const confirmRating = () => {
     for (let [interestId, interestRating] of Object.entries(interestRatings)) {
-      protectedApi
+      const tempPromise = protectedApi
         .post('/api/event-attendee-interest/', {
           atendee: currentEvent.attendance.id,
           interest: interestId,
           score: interestRating,
-        }) //TODO .then(update event attendance with new eventattendeeinterest_set)
+        })
+        .then(async (res) => {
+          ratingChanged(res.data.interest, res.data.score);
+          const updatedAttendance = await getAttendanceStatus(currentEvent.id);
+          const eventAttendance = {
+            id: updatedAttendance.id,
+            user: updatedAttendance.user,
+            userInterests: updatedAttendance.eventatendeeintereset_set,
+          };
+
+          setCurrentEvent({...currentEvent, attendance: eventAttendance });
+        })
         .catch(err => initializeRatings(currentEvent.attendance))
         .finally(() => setOpen(false));
     }
@@ -237,7 +248,7 @@ const EventDetailsScreen = () => {
 
 
   return (
-    <Box className="body" display="flex" flexDirection="column">
+    <Box display="flex" flexDirection="column">
       <Box className="download-edit-delete-button-group" display="flex" justifyContent="center">
         <DownloadPrintables 
           currentUser={currentUser} 
@@ -255,11 +266,9 @@ const EventDetailsScreen = () => {
                 pathname: `/event/${currentEvent.id}/edit/`,
                 state: currentEvent,
               }}
-              icon
             >
               <EditIcon/>
             </IconButton>
-            ,
             <IconButton
               size="small"
               variant="contained"

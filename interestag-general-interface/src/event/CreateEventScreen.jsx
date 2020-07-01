@@ -20,7 +20,7 @@ function CreateEventScreen() {
   }
 
   return (
-    <div className="body">
+    <div>
       <QontoStepper activeStep={activeStep} stepClicked={stepClicked} />
       {<CreateEventMultiform activeStep={activeStep} nextStep={nextStep} prevStep={prevStep} />}
       <br />

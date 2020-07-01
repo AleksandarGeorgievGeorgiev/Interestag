@@ -29,7 +29,7 @@ function DiscoverEventScreen() {
   }
 
   return (
-    <div className="body">
+    <div>
       {events.map((event) => (
         <Card key={event.id}>
           <div className="list-group-item">

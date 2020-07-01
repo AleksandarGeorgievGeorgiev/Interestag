@@ -17,8 +17,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { UserContext } from '../user-context/UserContextProvider';
 
 const useStyles = makeStyles({
-  root: {
-    minWidth: 0
+  navAction: {
+    minWidth: 0,
+    backgroundColor: '#9984d4',
+    width: '100%',
   },
   pinkColored: {
     color: '#FFFFFF',
@@ -36,11 +38,11 @@ function BottomNavBar() {
           className="bottom-nav-custom-css"
           showLabels
         >
-          <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/" label="Home" icon={<HomeIcon />} />
-          <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/discover" label="Discover" icon={<SearchIcon />}/>
-          <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/going_to" label="Going-to" icon={<FlightTakeoffIcon />} />
-          <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/event/create" label="Add" icon={<AddIcon />} />
-          <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />}/>
+          <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/" label="Home" icon={<HomeIcon />} />
+          <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/discover" label="Discover" icon={<SearchIcon />}/>
+          <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/going_to" label="Going-to" icon={<FlightTakeoffIcon />} />
+          <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/event/create" label="Add" icon={<AddIcon />} />
+          <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to={`/profile/${currentUser.userId}`} label="Profile" icon={<PersonIcon />}/>
         </BottomNavigation>
       )
     }
@@ -50,9 +52,9 @@ function BottomNavBar() {
         className="bottom-nav-custom-css"
         showLabels
       >
-        <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/login/" label="Login" icon={<LockOpenIcon />} />
-        <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/" label="Home" icon={<HomeIcon />} />
-        <BottomNavigationAction classes={{root: classes.root, wrapper: classes.pinkColored}} component={Link} to="/register/" label="Register" icon={<PersonAddIcon />} />
+        <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/login/" label="Login" icon={<LockOpenIcon />} />
+        <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/" label="Home" icon={<HomeIcon />} />
+        <BottomNavigationAction classes={{root: classes.navAction, wrapper: classes.pinkColored}} component={Link} to="/register/" label="Register" icon={<PersonAddIcon />} />
       </BottomNavigation>
     );
   }

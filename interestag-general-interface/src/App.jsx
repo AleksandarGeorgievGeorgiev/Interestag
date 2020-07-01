@@ -19,10 +19,15 @@ import { EventDetailsScreen } from './event/EventDetailsScreen';
 import { EditEventForm } from './event/EditEventForm';
 
 const useCss = makeStyles({
+  app: {
+    display: 'flex',
+    minHeight: '100vh',
+    flexDirection: 'column',
+    height: '100vh'
+  },
   body: {
-    gridArea: 'body',
-    marginTop: '70px',
-    padding: '0 15px',
+    flex: '1',
+    overflow: 'auto',
   },
 });
 
@@ -50,7 +55,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className={css.app}>
       <AppTopBar />
       <div className={css.body}>
         {renderRoutes()}
