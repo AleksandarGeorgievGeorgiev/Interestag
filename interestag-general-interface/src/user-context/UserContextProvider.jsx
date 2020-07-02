@@ -16,71 +16,77 @@ const UserContext = React.createContext(
 const UserContextProvider = ({ children }) => {
   const navigationHistory = useHistory();
   const clientStorage = useClientStorage();
-  const [currentUser, setUserData] = useState(() => { 
+  const [currentUser, setUserData] = useState(() => {
     const user = clientStorage.getFromStorage('currentUser');
 
-    return user ? user : {}
+    return user || {};
   });
 
-  const authenticateUser = (response) => {
+  const authenticateUser = () => {
     const jwtCookie = Cookies.get('jwt');
     const decoded = window.atob(jwtCookie.trim().split('.')[1]);
-    const userData = JSON.parse(decoded);
+    let userData = JSON.parse(decoded);
+    axios
+      .get(`${process.env.REACT_APP_BASEURL}/api/auth/profile/${userData.userId}/`)
+      .then((res) => {
+        userData = { ...userData, first_name: res.data.first_name, last_name: res.data.last_name };
+
+        clientStorage.saveInStorage('currentUser', userData);
+        setUserData(userData);
+      });
 
     clientStorage.saveInStorage('currentUser', userData);
     setUserData(userData);
   };
 
-  const deauthenticateUser = () => {
-    authorizeRequest().then(res => {
-      return axios.post(
-        `${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`, 
-        {},
-        { withCredentials: true }
-      ).then(res => {
-        clientStorage.removeFromStorage('currentUser'); 
-        setUserData({});
-        navigationHistory.push("/login/");
-
-        return Promise.resolve(res);
-      });
-    });
-  }
+  const isJwtFresh = () => (currentUser.exp ? currentUser.exp > Date.now() / 1000 : false);
 
   const authorizeRequest = async () => {
     if (!isJwtFresh()) {
       return axios.post(
-          `${process.env.REACT_APP_BASEURL}/api/auth/token/refresh-jwt/`, 
-          {}, 
-          { withCredentials: true }
-        ).then((res) => { return Promise.resolve(res); })
+        `${process.env.REACT_APP_BASEURL}/api/auth/token/refresh-jwt/`,
+        {},
+        { withCredentials: true },
+      ).then((res) => Promise.resolve(res))
         .catch((err) => {
-          navigationHistory.push("/login/");
+          navigationHistory.push('/login/');
 
           return Promise.reject(err);
         });
     }
 
     return Promise.resolve();
-  }
+  };
+
+  const deauthenticateUser = () => {
+    authorizeRequest().then((res) => axios.post(
+      `${process.env.REACT_APP_BASEURL}/api/auth/token/logout/`,
+      {},
+      { withCredentials: true },
+    ).then((res) => {
+      clientStorage.removeFromStorage('currentUser');
+      setUserData({});
+      navigationHistory.push('/login/');
+
+      return Promise.resolve(res);
+    }));
+  };
 
   const isAuthenticated = () => {
     const rteCookie = Cookies.get('rte');
-    return rteCookie ? true : false;
-  }
+    return !!rteCookie;
+  };
 
-  const isJwtFresh = () => {
-    return currentUser.exp ? currentUser.exp > Date.now()/1000 : false;
-  }
 
   return (
-    <UserContext.Provider value={{ 
+    <UserContext.Provider value={{
       currentUser,
       isAuthenticated,
       authenticateUser,
       deauthenticateUser,
       isJwtFresh,
-    }}>
+    }}
+    >
       {children}
     </UserContext.Provider>
   );

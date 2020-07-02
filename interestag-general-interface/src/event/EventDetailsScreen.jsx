@@ -1,33 +1,30 @@
-import React, { useState, useEffect, useContext } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useContext } from 'react';
 
-import { useParams, useHistory, Link } from "react-router-dom";
+import {
+  useParams, useHistory, Link,
+} from 'react-router-dom';
 import {
   Box,
   Divider,
   Button,
   ButtonGroup,
-  TextField,
   SwipeableDrawer,
-  Slider,
-  Paper
-} from "@material-ui/core";
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import GradeIcon from '@material-ui/icons/Grade';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { InterestField } from "./InterestField";
-import GetAppIcon from '@material-ui/icons/GetApp';
-import { UserContext } from "../user-context/UserContextProvider";
-import { InviteAttendeeForm } from "./InviteAttendeeForm";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import ColorLensIcon from '@material-ui/icons/ColorLens';
-import { Redirect } from "react-router-dom";
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import { InviteAttendeeForm } from './InviteAttendeeForm';
+import { UserContext } from '../user-context/UserContextProvider';
+import { InterestField } from './InterestField';
 
 import { RateInterestsForm } from './RateInterestsForm';
-import { useProtectedApi } from "../core/useProtectedApi";
+import { useProtectedApi } from '../core/useProtectedApi';
 import { DownloadPrintables } from './DownloadPrintables';
 
 const ATTENDANCE_STATUS = {
@@ -37,24 +34,34 @@ const ATTENDANCE_STATUS = {
 };
 
 const useCss = makeStyles({
+  eventDetailsScreen: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+  eventDetails: {
+    overflow: 'auto',
+    padding: '0 15px',
+  },
   eventActionBar: {
     overflow: 'hidden',
-    position: 'fixed',
-    bottom: '56px',
+    // position: 'fixed',
+    // bottom: '56px',
     backgroundColor: '#edeaf5',
     justifyContent: 'space-between',
     padding: '5px 12px',
     display: 'flex',
-    width: '100%',
+    // width: '100%',
     borderRadius: '7px',
-    marginLeft: '-15px'
+    // marginLeft: '-15px',
+    marginTop: 'auto',
   },
   rateInterestsButton: {
     color: '#ffd300',
     // color: '#a8509e',
   },
   goingSelected: {
-    backgroundColor: '#69bd45'
+    backgroundColor: '#69bd45',
   },
   notGoingSelected: {
     backgroundColor: '#ed1f24',
@@ -62,6 +69,9 @@ const useCss = makeStyles({
   goingPending: {
     color: '#faa21a',
     borderColor: '#faa21a',
+  },
+  interestCard: {
+    marginBottom: '5px',
   },
 });
 
@@ -76,7 +86,6 @@ const EventDetailsScreen = () => {
   const protectedApi = useProtectedApi();
   const [drawerOpen, setOpen] = useState(false);
   const [interestRatings, setInterestRatings] = useState({});
-  const [eventAttendanceData, setEventAttendanceData] = useState({});
   const css = useCss();
 
   useEffect(() => {
@@ -99,7 +108,7 @@ const EventDetailsScreen = () => {
       setCreator(creator);
 
       setAttendanceStatus(
-        attendance.invitation_status || ATTENDANCE_STATUS.Rejected
+        attendance.invitation_status || ATTENDANCE_STATUS.Rejected,
       );
 
       const eventAttendance = {
@@ -107,8 +116,6 @@ const EventDetailsScreen = () => {
         user: attendance.user,
         userInterests: attendance.eventatendeeintereset_set,
       };
-
-      setEventAttendanceData(eventAttendance)
 
       setCurrentEvent({
         ...eventData,
@@ -123,7 +130,7 @@ const EventDetailsScreen = () => {
 
   const initializeRatings = (attendance) => {
     let scores = {};
-    attendance.userInterests.forEach(interestRating => {
+    attendance.userInterests.forEach((interestRating) => {
       scores = {
         ...scores,
         [interestRating.interest]: interestRating.score,
@@ -131,25 +138,21 @@ const EventDetailsScreen = () => {
     });
 
     setInterestRatings(scores);
-  }
-
-  const getCreatorData = (creatorId) => {
-    return protectedApi
-      .get(`${process.env.REACT_APP_BASEURL}/api/auth/profile/${creatorId}/`)
-      .then((creatorRes) => creatorRes.data);
   };
 
-  const getAttendanceStatus = (eventId) => {
-    return protectedApi
-      .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
-      .then((attendanceRes) => {
-        const attendanceFound = attendanceRes.data.find(
-          ({ event: e }) => e.id === eventId
-        );
+  const getCreatorData = (creatorId) => protectedApi
+    .get(`${process.env.REACT_APP_BASEURL}/api/auth/profile/${creatorId}/`)
+    .then((creatorRes) => creatorRes.data);
 
-        return attendanceFound || {};
-      });
-  };
+  const getAttendanceStatus = (eventId) => protectedApi
+    .get(`${process.env.REACT_APP_BASEURL}/api/event/going-to`)
+    .then((attendanceRes) => {
+      const attendanceFound = attendanceRes.data.find(
+        ({ event: e }) => e.id === eventId,
+      );
+
+      return attendanceFound || {};
+    });
 
   const joinEvent = () => {
     if (attendanceStatus === ATTENDANCE_STATUS.Pending) {
@@ -158,11 +161,10 @@ const EventDetailsScreen = () => {
           `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
           {
             invitation_status: ATTENDANCE_STATUS.Accepted,
-          }
+          },
         )
         .then((res) => setAttendanceStatus(res.data.invitation_status));
-    }
-    else {
+    } else {
       protectedApi
         .post(`${process.env.REACT_APP_BASEURL}/api/attendance/`, {
           user: currentUser.userId,
@@ -186,7 +188,7 @@ const EventDetailsScreen = () => {
         `${process.env.REACT_APP_BASEURL}/api/attendance/${currentEvent.attendance.id}/`,
         {
           invitation_status: ATTENDANCE_STATUS.Rejected,
-        }
+        },
       )
       .then((res) => setAttendanceStatus(res.data.invitation_status));
   };
@@ -195,31 +197,27 @@ const EventDetailsScreen = () => {
     protectedApi
       .delete(
         `${process.env.REACT_APP_BASEURL}/api/event/${currentEvent.id}/`,
-        {}
+        {},
       )
-      .then((res) =>
-        history.push({
-          pathname: `/profile/${creator}`,
-        })
-      );
+      .then((res) => history.push({
+        pathname: `/profile/${creator}`,
+      }));
   };
 
-  const isOwnEvent = () => {
-    return currentEvent.creator === currentUser.userId;
-  };
+  const isOwnEvent = () => currentEvent.creator === currentUser.userId;
 
   const ratingChanged = (interestId, newValue) => {
     const scores = {
       ...interestRatings,
-      [interestId]: newValue
-    }
+      [interestId]: newValue,
+    };
 
     setInterestRatings(scores);
-  }
+  };
 
   const confirmRating = () => {
-    for (let [interestId, interestRating] of Object.entries(interestRatings)) {
-      const tempPromise = protectedApi
+    Object.entries(interestRatings).forEach(([interestId, interestRating]) => {
+      protectedApi
         .post('/api/event-attendee-interest/', {
           atendee: currentEvent.attendance.id,
           interest: interestId,
@@ -234,29 +232,30 @@ const EventDetailsScreen = () => {
             userInterests: updatedAttendance.eventatendeeintereset_set,
           };
 
-          setCurrentEvent({...currentEvent, attendance: eventAttendance });
+          setCurrentEvent({ ...currentEvent, attendance: eventAttendance });
         })
-        .catch(err => initializeRatings(currentEvent.attendance))
+        .catch((err) => initializeRatings(currentEvent.attendance))
         .finally(() => setOpen(false));
-    }
-  }
+    });
+  };
 
   const cancelRating = () => {
     initializeRatings(currentEvent.attendance);
     setOpen(false);
-  }
+  };
 
 
   return (
-    <Box display="flex" flexDirection="column">
+    <div className={css.eventDetailsScreen}>
       <Box className="download-edit-delete-button-group" display="flex" justifyContent="center">
-        <DownloadPrintables 
-          currentUser={currentUser} 
+        <DownloadPrintables
+          currentUser={currentUser}
           attendeeInterests={currentEvent.attendance ? currentEvent.attendance.userInterests : []}
           eventInterests={currentEvent.interest_set}
+          interestSelectionCount={currentEvent.interest_selection_count}
         />
         {isOwnEvent() && (
-          <ButtonGroup style={{ marginLeft: "auto" }}>
+          <ButtonGroup style={{ marginLeft: 'auto' }}>
             <IconButton
               size="small"
               variant="contained"
@@ -267,7 +266,7 @@ const EventDetailsScreen = () => {
                 state: currentEvent,
               }}
             >
-              <EditIcon/>
+              <EditIcon />
             </IconButton>
             <IconButton
               size="small"
@@ -275,37 +274,56 @@ const EventDetailsScreen = () => {
               color="primary"
               onClick={() => deleteOnClick(currentEvent.id)}
             >
-              <DeleteIcon/>
+              <DeleteIcon />
             </IconButton>
           </ButtonGroup>
         )}
       </Box>
-      <Divider />
-      <Box display="flex" justifyContent="center">
-        <h3>{currentEvent.name}</h3>
+      <Box className={css.eventDetails}>
+        <Divider />
+        <Box display="flex" justifyContent="center">
+          <h3>{currentEvent.name}</h3>
+        </Box>
+        <Divider />
+        <Box display="flex" justifyContent="space-around">
+          {currentEvent.event_date
+            && new Date(currentEvent.event_date).toDateString()}
+          <span>{creator.username}</span>
+        </Box>
+        <p>{currentEvent.description}</p>
+        <h3>Interests</h3>
+        <Divider />
+        {currentEvent.interest_set
+          && currentEvent.interest_set.map((interest, index) => (
+            <Card key={index} className={css.interestCard}>
+              <div style={{
+                background: `linear-gradient(90deg, ${interest.colour} ${(interestRatings[interest.id] || 0) * 10}%, #FFFFFF ${(interestRatings[interest.id] || 0) * 10}%)`,
+              }}
+              >
+                <CardContent>
+                  <InterestField {...interest} disabled />
+                </CardContent>
+              </div>
+            </Card>
+          ))}
+
+        {isOwnEvent() && (
+          <InviteAttendeeForm
+            attendance={ATTENDANCE_STATUS.Pending}
+            eventId={currentEvent.id}
+            style={{ marginTop: '15px' }}
+          />
+        )}
+        <SwipeableDrawer anchor="bottom" open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
+          <RateInterestsForm
+            interests={currentEvent.interest_set}
+            ratings={interestRatings}
+            confirmRatings={confirmRating}
+            cancelAction={cancelRating}
+            ratingChangeHandler={ratingChanged}
+          />
+        </SwipeableDrawer>
       </Box>
-      <Divider />
-      <Box display="flex" justifyContent="space-around">
-        {currentEvent.event_date &&
-          new Date(currentEvent.event_date).toDateString()}
-        <span>{creator.username}</span>
-      </Box>
-      <p>{currentEvent.description}</p>
-      <h3>Interests</h3>
-      <Divider />
-      {currentEvent.interest_set &&
-        currentEvent.interest_set.map((interest, index) => (
-          <Card key={index}>
-            <div style={{
-              background: `linear-gradient(90deg, ${interest.colour} ${(interestRatings[interest.id] || 0) * 10}%, #FFFFFF ${(interestRatings[interest.id] || 0) * 10}%)`
-            }}
-            >
-              <CardContent>
-                <InterestField {...interest} disabled={true} />
-              </CardContent>
-            </div>
-          </Card>
-        ))}
       <Box className={css.eventActionBar}>
         <ButtonGroup variant="outlined" classes={attendanceStatus === ATTENDANCE_STATUS.Pending ? { groupedOutlined: css.goingPending } : {}}>
           <Button
@@ -313,49 +331,32 @@ const EventDetailsScreen = () => {
             classes={{ contained: css.goingSelected }}
             variant={
               ATTENDANCE_STATUS.Accepted === attendanceStatus
-                ? "contained"
-                : "outlined"
+                ? 'contained'
+                : 'outlined'
             }
             size="large"
             color="primary"
           >
             Going
-            </Button>
+          </Button>
           <Button
             onClick={leaveEvent}
             classes={{ contained: css.notGoingSelected }}
             variant={
               ATTENDANCE_STATUS.Rejected === attendanceStatus
-                ? "contained"
-                : "outlined"
+                ? 'contained'
+                : 'outlined'
             }
             size="large"
             color="primary"
           >
             Not going
-            </Button>
+          </Button>
         </ButtonGroup>
-        {ATTENDANCE_STATUS.Accepted === attendanceStatus &&
-          <Button onClick={() => setOpen(true)}><GradeIcon className={css.rateInterestsButton}/></Button>
-        }
+        {ATTENDANCE_STATUS.Accepted === attendanceStatus
+          && <Button onClick={() => setOpen(true)}><GradeIcon className={css.rateInterestsButton} /></Button>}
       </Box>
-      {isOwnEvent() && (
-        <InviteAttendeeForm
-          attendance={ATTENDANCE_STATUS.Pending}
-          eventId={currentEvent.id}
-          style={{ marginTop: "15px" }}
-        />
-      )}
-      <SwipeableDrawer anchor={'bottom'} open={drawerOpen} onOpen={() => setOpen(true)} onClose={cancelRating}>
-        <RateInterestsForm 
-          interests={currentEvent.interest_set} 
-          ratings={interestRatings} 
-          confirmRatings={confirmRating}
-          cancelAction={cancelRating}
-          ratingChangeHandler={ratingChanged}
-        />
-      </SwipeableDrawer>    
-    </Box>
+    </div>
   );
 };
 

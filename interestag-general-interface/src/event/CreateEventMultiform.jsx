@@ -2,8 +2,6 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { UserContext } from '../user-context/UserContextProvider';
 
-import axios from 'axios';
-
 import { CreateInterestsForm } from './CreateInterestsForm';
 import { useFormHandler } from '../register/useFormHandler';
 import { CreateEventOverview } from './CreateEventOverview';
@@ -22,67 +20,62 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
     tempInterests.push({ name: '', color: '' });
 
     setInterests(tempInterests);
-  }
+  };
 
   const deleteInterest = (index) => {
     const tempInterests = interests.slice();
     tempInterests.splice(index, 1);
 
     setInterests(tempInterests);
-  }
+  };
 
   const interestValueChanged = (index, value) => {
     const tempInterests = interests.slice();
 
-    tempInterests[index] = { ...tempInterests[index], ...value }
+    tempInterests[index] = { ...tempInterests[index], ...value };
 
     setInterests(tempInterests);
-  }
+  };
 
-  const parseDate = (dateObject) => {
-    return `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}`;
-  }
+  const parseDate = (dateObject) => `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}-${dateObject.getDate()}T${dateObject.getHours()}:${dateObject.getMinutes()}`;
 
   const createEvent = () => {
     const eventDetails = createEventFormHandler.values;
 
     protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/event/`, {
-      'name': eventDetails.name,
-      'description': eventDetails.description,
-      'event_date': parseDate(eventDetails.eventDate),
-      'interest_selection_count': eventDetails.topInterests,
-      'publicity': eventDetails.publicity
+      name: eventDetails.name,
+      description: eventDetails.description,
+      event_date: parseDate(eventDetails.eventDate),
+      interest_selection_count: eventDetails.topInterests,
+      publicity: eventDetails.publicity,
     })
-    .then(res => {
-      const createInterests = protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`, 
-        interests.map(interest => { 
-          return { 
+      .then((res) => {
+        const createInterests = protectedApi.post(`${process.env.REACT_APP_BASEURL}/api/interest/create_many/`,
+          interests.map((interest) => ({
             event: res.data.id,
             name: interest.name,
             colour: interest.colour,
-          }
-        }
-      ));
+          })));
 
-      const attendMyEvent = protectedApi.post('/api/attendance/', {
-        user: currentUser.userId,
-        event: res.data.id,
-        invitation_status: 2,
-      });
+        const attendMyEvent = protectedApi.post('/api/attendance/', {
+          user: currentUser.userId,
+          event: res.data.id,
+          invitation_status: 2,
+        });
 
-      return Promise.all([createInterests, attendMyEvent]);
-    })
-    .then(res => history.push({
-      pathname: `/profile/${currentUser.userId}`,
-      state: eventDetails
-    }))
-    .catch(err => console.log(err)); //TODO: Display error message
-  }
+        return Promise.all([createInterests, attendMyEvent]);
+      })
+      .then((res) => history.push({
+        pathname: `/profile/${currentUser.userId}`,
+        state: eventDetails,
+      }))
+      .catch((err) => console.log(err)); // TODO: Display error message
+  };
 
   const renderFormByStep = () => {
     switch (activeStep) {
       case 0: return (
-        <CreateEventDetailsForm {...createEventFormHandler} nextStep={nextStep}/>
+        <CreateEventDetailsForm {...createEventFormHandler} nextStep={nextStep} />
       );
       case 1: return (
         <CreateInterestsForm
@@ -95,20 +88,22 @@ const CreateEventMultiform = ({ activeStep, nextStep, prevStep }) => {
         />
       );
       case 2: return (
-        <CreateEventOverview 
-          eventDetails={createEventFormHandler.values} 
+        <CreateEventOverview
+          eventDetails={createEventFormHandler.values}
           interests={interests}
           prevStep={prevStep}
-          createEvent={createEvent} />
-      )
+          createEvent={createEvent}
+        />
+      );
+      default: return (<></>);
     }
-  }
+  };
 
   return (
     <form>
       {renderFormByStep()}
     </form>
   );
-}
+};
 
 export { CreateEventMultiform };

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import { Header } from '../core/Header';
 import { QontoStepper } from './QontoStepper';
 import { CreateEventMultiform } from './CreateEventMultiform';
 
@@ -9,20 +8,20 @@ function CreateEventScreen() {
 
   const stepClicked = (index) => {
     setStep(index);
-  }
+  };
 
   const nextStep = () => {
     setStep(activeStep + 1);
-  }
+  };
 
   const prevStep = () => {
     setStep(activeStep - 1);
-  }
+  };
 
   return (
     <div>
       <QontoStepper activeStep={activeStep} stepClicked={stepClicked} />
-      {<CreateEventMultiform activeStep={activeStep} nextStep={nextStep} prevStep={prevStep} />}
+      <CreateEventMultiform activeStep={activeStep} nextStep={nextStep} prevStep={prevStep} />
       <br />
     </div>
   );

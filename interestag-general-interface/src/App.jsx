@@ -23,7 +23,8 @@ const useCss = makeStyles({
     display: 'flex',
     minHeight: '100vh',
     flexDirection: 'column',
-    height: '100vh'
+    height: '100vh',
+    backgroundColor: '#9984d414',
   },
   body: {
     flex: '1',

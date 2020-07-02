@@ -1,17 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Check from '@material-ui/icons/Check';
-import SettingsIcon from '@material-ui/icons/Settings';
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-import VideoLabelIcon from '@material-ui/icons/VideoLabel';
 import StepConnector from '@material-ui/core/StepConnector';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 const QontoConnector = withStyles({
   alternativeLabel: {
@@ -30,7 +24,7 @@ const QontoConnector = withStyles({
     },
   },
   line: {
-    borderColor: '#eaeaf0',
+    borderColor: '#cccce6',
     borderTopWidth: 3,
     borderRadius: 1,
   },
@@ -38,7 +32,7 @@ const QontoConnector = withStyles({
 
 const useQontoStepIconStyles = makeStyles({
   root: {
-    color: '#eaeaf0',
+    color: '#cccce6',
     display: 'flex',
     height: 22,
     alignItems: 'center',
@@ -82,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
+  stepper: {
+    backgroundColor: 'transparent',
+  },
   button: {
     marginRight: theme.spacing(1),
   },
@@ -97,7 +94,7 @@ const QontoStepper = ({ activeStep, stepClicked }) => {
 
   return (
     <div className={classes.root}>
-      <Stepper alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
+      <Stepper classes={{ root: classes.stepper }} alternativeLabel activeStep={activeStep} connector={<QontoConnector />}>
         {steps.map((label, index) => (
           <Step key={label} >
             <StepLabel 

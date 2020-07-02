@@ -11,7 +11,6 @@ body {
   right: 0;
   /* margin-bottom: 50px; */
   text-align: center;
-  background-color: #dff8f2;
   height: 100%;
 }
 
@@ -80,14 +79,11 @@ ul {
   padding: 0;
 }
 
-
 .list-group-item{
   background-color: #d1c9e7;
-  margin: 5px;
   width: auto;
   height: 15vmin;
-  border-radius: 10px;
-  text-align: left;
+  text-align: center;
 }
 
 .MuiPaper-root.alert{

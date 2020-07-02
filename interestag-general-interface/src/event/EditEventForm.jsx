@@ -149,8 +149,8 @@ function EditEventForm() {
   }
 
   return (
-    <form className="body">
-      <h3>Event Details</h3>
+    <form style={{ marginBottom: '50px' }}>
+      <h3>Edit Event</h3>
       <Divider />
       <TextField
         name="name"
@@ -203,8 +203,8 @@ function EditEventForm() {
       </FormControl>
       <h3>Event Interests</h3>
       <Divider />
-      {interests.map((interest, index) => { 
-        if(interest.status !== INTEREST_STATUS.Deleted) {
+      {interests.map((interest, index) => {
+        if (interest.status !== INTEREST_STATUS.Deleted) {
           return (
             <InterestField
               key={index}
@@ -216,15 +216,16 @@ function EditEventForm() {
           )
         }
       })}
-      <Box display="flex" flexDirection="column" alignItems="center">
-        <Button
-          variant="contained"
-          disableElevation
-          style={{ width: '100px', margin: '5px 5px' }}
-          onClick={addInterest}
-        >
-          <AddIcon />
-        </Button>
+      <Button
+        variant="contained"
+        disableElevation
+        style={{ width: '100px', margin: '5px 5px' }}
+        onClick={addInterest}
+      >
+        <AddIcon />
+      </Button>
+      <Box display="flex" justifyContent="space-around" alignItems="center">
+
         <Fab
           variant="extended"
           size="medium"
